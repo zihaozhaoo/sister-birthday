@@ -1,0 +1,25 @@
+{
+  "name": "sister-birthday",
+  "version": "0.1.0",
+  "description": "Birthday site for 诺宝",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:manifest": "node scripts/build-manifest.mjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zihaozhaoo/sister-birthday.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zihaozhaoo/sister-birthday/issues"
+  },
+  "homepage": "https://github.com/zihaozhaoo/sister-birthday#readme",
+  "type": "module",
+  "private": "true",
+  "dependencies": {
+    "exifr": "^7.1.3"
+  }
+}
