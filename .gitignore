@@ -4,3 +4,6 @@ node_modules/
 .env
 .env.local
 *.log
+
+# Original full-size photos (1.8 GB). Web-optimized copies live in public/photos/.
+photos-source/
