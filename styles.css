@@ -1,0 +1,105 @@
+:root {
+  --bg-1: #ffe5ec;
+  --bg-2: #fff0f5;
+  --accent: #ff6b9d;
+  --accent-deep: #c2185b;
+  --text: #3a2230;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  min-height: 100%;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  color: var(--text);
+  background: linear-gradient(135deg, var(--bg-1), var(--bg-2));
+}
+
+.stage {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.card {
+  position: relative;
+  z-index: 2;
+  max-width: 560px;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 48px 32px;
+  text-align: center;
+  box-shadow: 0 20px 60px rgba(194, 24, 91, 0.15);
+}
+
+.kicker {
+  margin: 0 0 8px;
+  font-size: 14px;
+  letter-spacing: 0.2em;
+  color: var(--accent-deep);
+  text-transform: uppercase;
+}
+
+h1 {
+  margin: 0 0 16px;
+  font-size: clamp(32px, 6vw, 48px);
+  color: var(--accent-deep);
+}
+
+.message {
+  font-size: 17px;
+  line-height: 1.8;
+  margin: 0 0 32px;
+}
+
+.wish-btn {
+  appearance: none;
+  border: 0;
+  background: var(--accent);
+  color: white;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 14px 28px;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: 0 8px 20px rgba(255, 107, 157, 0.4);
+}
+
+.wish-btn:hover { transform: translateY(-2px); }
+.wish-btn:active { transform: translateY(0); }
+
+.wish-text {
+  margin-top: 24px;
+  font-size: 16px;
+  color: var(--accent-deep);
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.confetti {
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(circle at 10% 20%, #ffb3c6 6px, transparent 7px),
+    radial-gradient(circle at 80% 30%, #ffd6e0 5px, transparent 6px),
+    radial-gradient(circle at 30% 80%, #ff6b9d 4px, transparent 5px),
+    radial-gradient(circle at 70% 70%, #ffe5ec 7px, transparent 8px),
+    radial-gradient(circle at 50% 10%, #ffb3c6 3px, transparent 4px);
+  background-size: 600px 600px;
+  opacity: 0.7;
+  z-index: 1;
+  pointer-events: none;
+}
