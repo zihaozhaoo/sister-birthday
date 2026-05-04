@@ -1291,21 +1291,22 @@ button { font: inherit; color: inherit; cursor: pointer; }
    ============================================================ */
 .cover-hero {
   position: absolute;
-  top: clamp(112px, 19vh, 240px);
-  left: clamp(14px, 4vw, 64px);
-  width: clamp(140px, 23vw, 280px);
+  /* 落在横线纸内部、"小寿星" 标签下方的空白区域 */
+  top: clamp(140px, 24vh, 260px);
+  left: clamp(18px, 5vw, 80px);
+  width: clamp(105px, 14vw, 170px);
   z-index: 5;
   background: #fffaf2;
-  padding: 10px 10px 30px;
+  padding: 8px 8px 24px;
   border: 1.5px solid rgba(26, 0, 40, .3);
-  box-shadow: 6px 8px 0 rgba(26, 0, 40, .25);
-  transform: rotate(-4deg);
+  box-shadow: 5px 6px 0 rgba(26, 0, 40, .22);
+  transform: rotate(-5deg);
   transition: transform .35s cubic-bezier(.2,.8,.3,1.2),
               box-shadow .35s ease;
 }
 .cover-hero:hover {
-  transform: rotate(0) scale(1.05);
-  box-shadow: 10px 12px 0 rgba(26, 0, 40, .3);
+  transform: rotate(0) scale(1.08);
+  box-shadow: 8px 10px 0 rgba(26, 0, 40, .3);
   z-index: 12;
 }
 .cover-hero picture,
@@ -1316,11 +1317,11 @@ button { font: inherit; color: inherit; cursor: pointer; }
   background: rgba(26, 0, 40, .06);
 }
 .cover-hero figcaption {
-  margin-top: 10px;
+  margin-top: 8px;
   text-align: center;
   font-family: var(--f-hand);
   font-weight: 700;
-  font-size: clamp(16px, 1.8vw, 22px);
+  font-size: clamp(14px, 1.4vw, 18px);
   color: var(--ink);
   letter-spacing: .04em;
 }
@@ -1328,9 +1329,9 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* 顶部一条粉色 washi 胶带 */
 .cover-hero-tape {
   position: absolute;
-  top: -10px; left: 50%;
-  width: clamp(50px, 9vw, 80px);
-  height: 18px;
+  top: -8px; left: 50%;
+  width: clamp(40px, 6vw, 60px);
+  height: 14px;
   background: rgba(255, 138, 209, .8);
   background-image: repeating-linear-gradient(
     45deg,
@@ -1349,8 +1350,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
 /* 触屏不要悬浮变换 */
 @media (hover: none) {
   .cover-hero:hover {
-    transform: rotate(-4deg);
-    box-shadow: 6px 8px 0 rgba(26, 0, 40, .25);
+    transform: rotate(-5deg);
+    box-shadow: 5px 6px 0 rgba(26, 0, 40, .22);
   }
 }
 
