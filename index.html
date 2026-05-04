@@ -51,10 +51,15 @@
 </section>
 
 
-<!-- ============== 2. 杂志封面：粉紫全息渐变 ============== -->
+<!-- ============== 2. 杂志封面：手帐 × Y2K 拼贴 ============== -->
 <section id="cover" class="scene cover hidden">
   <div class="holo-bg" aria-hidden="true"></div>
   <div class="grid-bg" aria-hidden="true"></div>
+
+  <!-- 顶部 / 底部 washi tape 胶带 -->
+  <span class="washi washi-top-1" aria-hidden="true"></span>
+  <span class="washi washi-top-2" aria-hidden="true"></span>
+  <span class="washi washi-bot-1" aria-hidden="true"></span>
 
   <header class="mag-top">
     <span class="mag-logo">NUOBAO<span class="dot">·</span>MAG</span>
@@ -68,15 +73,73 @@
       <span class="row holo bagel">NUOBAO</span>
     </h2>
 
+    <!-- 手画虚线圈圈住 12，配手写注释 -->
+    <svg class="doodle doodle-circle" viewBox="0 0 200 120" aria-hidden="true">
+      <ellipse cx="100" cy="60" rx="92" ry="50"
+        fill="none" stroke="#1a0028" stroke-width="3"
+        stroke-dasharray="6 6" stroke-linecap="round"/>
+    </svg>
+    <p class="handnote handnote-arrow caveat">
+      <span>← 是她！</span>
+    </p>
+
+    <!-- 手画箭头从右指向 12 -->
+    <svg class="doodle doodle-arrow-r" viewBox="0 0 120 60" aria-hidden="true">
+      <path d="M115 30 Q 70 5, 35 25 Q 18 32, 8 28"
+        fill="none" stroke="#1a0028" stroke-width="3" stroke-linecap="round"/>
+      <path d="M14 22 L 6 28 L 14 34" fill="none" stroke="#1a0028"
+        stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+
     <ul class="mag-bullets">
       <li>★ 345 张时光档案</li>
       <li>★ 独家舞台 · ON STAGE</li>
       <li>★ 12 岁限定刊 · 仅此一本</li>
     </ul>
 
+    <!-- 贴纸 / 便签 -->
     <p class="caveat tag tag-1">小寿星 ✿</p>
     <p class="caveat tag tag-2">2026!</p>
-    <p class="vt323 tag tag-3">●REC · 12.00.00</p>
+    <p class="caveat tag tag-memo">📷 345 张<br/>时光收藏</p>
+
+    <!-- 橡皮章 stamp -->
+    <span class="stamp stamp-best">BEST<br/>DAY EVER</span>
+    <span class="stamp stamp-cheers">★ CHEERS ★</span>
+
+    <!-- 手画小花 -->
+    <svg class="doodle flower flower-1" viewBox="0 0 60 60" aria-hidden="true">
+      <g fill="#ff8ad1" stroke="#1a0028" stroke-width="2">
+        <circle cx="30" cy="14" r="8"/>
+        <circle cx="46" cy="30" r="8"/>
+        <circle cx="30" cy="46" r="8"/>
+        <circle cx="14" cy="30" r="8"/>
+      </g>
+      <circle cx="30" cy="30" r="6" fill="#ffe45e" stroke="#1a0028" stroke-width="2"/>
+    </svg>
+    <svg class="doodle flower flower-2" viewBox="0 0 60 60" aria-hidden="true">
+      <g fill="#b5a9ff" stroke="#1a0028" stroke-width="2">
+        <circle cx="30" cy="14" r="8"/>
+        <circle cx="46" cy="30" r="8"/>
+        <circle cx="30" cy="46" r="8"/>
+        <circle cx="14" cy="30" r="8"/>
+      </g>
+      <circle cx="30" cy="30" r="6" fill="#ff8ad1" stroke="#1a0028" stroke-width="2"/>
+    </svg>
+    <svg class="doodle flower flower-3" viewBox="0 0 60 60" aria-hidden="true">
+      <g fill="#b8ffd9" stroke="#1a0028" stroke-width="2">
+        <circle cx="30" cy="14" r="8"/>
+        <circle cx="46" cy="30" r="8"/>
+        <circle cx="30" cy="46" r="8"/>
+        <circle cx="14" cy="30" r="8"/>
+      </g>
+      <circle cx="30" cy="30" r="6" fill="#ffe45e" stroke="#1a0028" stroke-width="2"/>
+    </svg>
+
+    <!-- 手画星形 stamp -->
+    <svg class="doodle star-stamp" viewBox="0 0 80 80" aria-hidden="true">
+      <path d="M40 8 L48 30 L72 32 L54 48 L60 72 L40 58 L20 72 L26 48 L8 32 L32 30 Z"
+        fill="#ffe45e" stroke="#1a0028" stroke-width="3" stroke-linejoin="round"/>
+    </svg>
   </div>
 
   <div class="cover-actions">
@@ -86,11 +149,11 @@
     </button>
   </div>
 
+  <!-- 飘浮 emoji 减少到 3 个，避免抢手帐戏 -->
   <div class="floaters" aria-hidden="true">
-    <span class="f f-star"  style="--x:6%; --y:20%;--d:0s;  --s:.7">✨</span>
-    <span class="f f-heart" style="--x:88%;--y:30%;--d:.5s;--s:.9">💗</span>
-    <span class="f f-bow"   style="--x:12%;--y:78%;--d:1s; --s:.8">🎀</span>
-    <span class="f f-star"  style="--x:78%;--y:80%;--d:1.5s;--s:.65">⭐</span>
+    <span class="f f-heart" style="--x:90%;--y:18%;--d:.5s;--s:.85">💗</span>
+    <span class="f f-bow"   style="--x:8%; --y:80%;--d:1s; --s:.8">🎀</span>
+    <span class="f f-star"  style="--x:82%;--y:82%;--d:1.5s;--s:.7">⭐</span>
   </div>
 </section>
 

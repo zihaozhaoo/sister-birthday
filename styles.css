@@ -336,23 +336,174 @@ button { font: inherit; color: inherit; cursor: pointer; }
   letter-spacing: .08em;
 }
 
-/* 散落贴纸 */
+/* 散落贴纸 / 便签纸 */
 .tag {
   position: absolute;
   background: var(--cream-yellow);
-  padding: 6px 14px;
+  padding: 8px 16px;
   border: 2px solid var(--ink);
-  border-radius: 8px;
-  box-shadow: 4px 4px 0 var(--ink);
+  border-radius: 6px;
+  box-shadow: 4px 4px 0 rgba(26, 0, 40, .85);
   font-size: clamp(16px, 1.8vw, 22px);
+  z-index: 4;
 }
 .tag-1 { top: 8%;  left: 6%;  transform: rotate(-8deg); background: var(--bubble-pink); }
 .tag-2 { top: 12%; right: 8%; transform: rotate(7deg);  background: var(--mint); }
-.tag-3 {
-  bottom: 14%; left: 50%; transform: translateX(-50%) rotate(-2deg);
-  background: var(--ink); color: var(--neon-pink);
-  border-color: var(--neon-pink); box-shadow: 4px 4px 0 var(--neon-pink);
-  font-size: clamp(13px, 1.2vw, 16px);
+
+/* 手帐风便签纸（替代之前黑底霓虹的硬感 REC 标签） */
+.tag-memo {
+  bottom: 18%; right: 7%;
+  background: #fffaf2;          /* 米色便签 */
+  transform: rotate(4deg);
+  font-size: clamp(15px, 1.6vw, 19px);
+  line-height: 1.25;
+  text-align: center;
+  box-shadow: 4px 4px 0 rgba(26, 0, 40, .15);
+}
+.tag-memo::before {
+  /* 顶部一小块"胶带"贴住便签 */
+  content: "";
+  position: absolute;
+  top: -10px; left: 50%;
+  width: 44px; height: 14px;
+  background: rgba(255, 138, 209, .65);
+  border: 1px solid rgba(26, 0, 40, .2);
+  transform: translateX(-50%) rotate(-3deg);
+}
+
+
+/* ==========================================================
+   手帐元素：washi tape / doodle / stamp / handnote
+   ========================================================== */
+
+/* Washi tape 胶带：半透明斜贴的彩色条纹带 */
+.washi {
+  position: absolute;
+  height: clamp(28px, 3.6vw, 44px);
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(255, 255, 255, 0) 0px,
+      rgba(255, 255, 255, 0) 8px,
+      rgba(255, 255, 255, .35) 8px,
+      rgba(255, 255, 255, .35) 16px),
+    var(--tape, var(--bubble-pink));
+  opacity: .82;
+  box-shadow: 0 4px 10px rgba(26, 0, 40, .15);
+  /* 撕过的边缘 */
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
+  z-index: 3;
+}
+.washi-top-1 {
+  --tape: var(--bubble-pink);
+  top: 7%; left: -6%;
+  width: 38%;
+  transform: rotate(-6deg);
+}
+.washi-top-2 {
+  --tape: var(--mint);
+  top: 4%; right: -4%;
+  width: 30%;
+  transform: rotate(8deg);
+}
+.washi-bot-1 {
+  --tape: var(--cream-yellow);
+  bottom: 6%; left: 32%;
+  width: 32%;
+  transform: rotate(-3deg);
+}
+
+/* SVG 手绘涂鸦统一样式 */
+.doodle {
+  position: absolute;
+  pointer-events: none;
+  z-index: 3;
+  filter: drop-shadow(2px 2px 0 rgba(26, 0, 40, .15));
+}
+
+/* 圈住 "12" 的虚线椭圆 */
+.doodle-circle {
+  width: clamp(180px, 28vw, 360px);
+  aspect-ratio: 200 / 120;
+  /* 视觉上对齐到 12 那一行（标题三行的中间） */
+  top: 48%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-3deg);
+  z-index: 2;
+  animation: doodle-wobble 4s ease-in-out infinite alternate;
+}
+
+/* 从右侧延伸的手画箭头，指向 12 */
+.doodle-arrow-r {
+  width: clamp(80px, 12vw, 140px);
+  top: 50%; right: 12%;
+  transform: rotate(-6deg);
+}
+
+/* 手写"是她！" 注释，在箭头右端 */
+.handnote {
+  position: absolute;
+  font-size: clamp(20px, 2.4vw, 30px);
+  color: var(--neon-pink);
+  z-index: 4;
+  text-shadow: 1px 1px 0 #fff, 2px 2px 0 rgba(26, 0, 40, .15);
+  font-weight: 700;
+}
+.handnote-arrow {
+  top: 48%; right: 2%;
+  transform: rotate(6deg);
+}
+
+/* 手画 5 瓣花朵 */
+.flower {
+  width: clamp(36px, 4.5vw, 56px);
+  aspect-ratio: 1;
+  animation: spin-slow 16s linear infinite;
+}
+.flower-1 { top: 18%;  left: 4%;  animation-delay: 0s; }
+.flower-2 { bottom: 26%; left: 12%; animation-delay: -5s; transform: rotate(20deg); }
+.flower-3 { top: 24%;  right: 18%; animation-delay: -10s; }
+
+/* 星形橡皮章 */
+.star-stamp {
+  width: clamp(50px, 7vw, 90px);
+  aspect-ratio: 1;
+  bottom: 22%; left: 6%;
+  transform: rotate(-15deg);
+  animation: doodle-wobble 5s ease-in-out infinite alternate;
+}
+
+/* 橡皮章 stamp（半透明印章感） */
+.stamp {
+  position: absolute;
+  font-family: var(--f-display);
+  font-size: clamp(14px, 1.6vw, 20px);
+  color: #c41a78;
+  text-align: center;
+  line-height: 1.05;
+  letter-spacing: .04em;
+  padding: 10px 16px;
+  border: 3px solid #c41a78;
+  border-radius: 6px;
+  background: transparent;
+  opacity: .72;
+  z-index: 3;
+  /* 印章不规则边：背景颜色 + mask 噪点 */
+  filter: blur(.2px);
+  text-transform: uppercase;
+}
+.stamp-best {
+  top: 60%; left: 8%;
+  transform: rotate(-10deg);
+  border-color: #c41a78;
+  color: #c41a78;
+}
+.stamp-cheers {
+  top: 22%; right: 4%;
+  transform: rotate(12deg);
+  border-color: #6f2dc4;
+  color: #6f2dc4;
+  border-radius: 999px;
+  padding: 8px 18px;
 }
 
 .cover-actions { display: grid; place-items: center; }
@@ -446,15 +597,53 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .scene.show { animation: scene-in .8s ease both; }
 
+/* 手帐 doodle 轻微"涂改感"摆动 */
+@keyframes doodle-wobble {
+  0%   { transform: translate(-50%, -50%) rotate(-3deg); }
+  100% { transform: translate(-50%, -50%) rotate(2deg); }
+}
+.doodle-arrow-r { animation: arrow-wobble 4s ease-in-out infinite alternate; }
+.star-stamp     { animation: stamp-wobble 5s ease-in-out infinite alternate; }
+@keyframes arrow-wobble {
+  0%   { transform: rotate(-10deg) translateY(0); }
+  100% { transform: rotate(-6deg)  translateY(-3px); }
+}
+@keyframes stamp-wobble {
+  0%   { transform: rotate(-15deg) scale(1); }
+  100% { transform: rotate(-12deg) scale(1.05); }
+}
+
+@keyframes spin-slow {
+  0%   { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+.flower-2 { animation: spin-slow 18s linear infinite reverse; }
+
 
 /* ============================================================
    响应式微调
    ============================================================ */
+@media (max-width: 640px) {
+  /* 手机上手帐密度降低 */
+  .doodle-arrow-r,
+  .handnote-arrow,
+  .flower-3,
+  .stamp-cheers,
+  .washi-top-2 {
+    display: none;
+  }
+  .stamp-best { font-size: 12px; padding: 6px 10px; top: 64%; }
+  .star-stamp { width: 50px; bottom: 14%; }
+  .tag-memo { right: 4%; bottom: 22%; padding: 6px 12px; }
+  .doodle-circle { width: 90vw; }
+}
+
 @media (max-width: 480px) {
   .mag-top { padding: 10px 14px; font-size: 11px; }
   .tag-1 { left: 2%; }
   .tag-2 { right: 2%; }
   .placeholder-card { box-shadow: 5px 5px 0 var(--bubble-pink); }
+  .washi-bot-1 { left: 14%; width: 50%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
