@@ -26,9 +26,8 @@ function updatePager() {
   nextBtn.disabled = currentIdx === scenes.length - 1;
 }
 
-// 主 CTA（PRESS PLAY / 进入时间线）+ 翻页按钮
+// PRESS PLAY 直接跳到 cover；后续翻页交给 pager
 $("#playBtn").addEventListener("click", () => show(1));
-$("#enterTimelineBtn").addEventListener("click", () => show(2));
 
 const prevBtn = $("#prevBtn");
 const nextBtn = $("#nextBtn");

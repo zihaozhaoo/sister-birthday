@@ -60,6 +60,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   min-height: 100svh;
   overflow: hidden;
   isolation: isolate;
+  /* 底部预留 pager 翻页器空间（safe area） */
+  padding-bottom: clamp(96px, 13vh, 140px);
 }
 
 .bagel { font-family: var(--f-display); font-weight: 400; letter-spacing: .02em; }
