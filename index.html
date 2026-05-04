@@ -1,28 +1,115 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="zh-CN">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>生日快乐 🎂</title>
-  <link rel="stylesheet" href="/styles.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+<meta name="theme-color" content="#0a0014" />
+<title>NUOBAO · 12 ✨</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Caveat:wght@600;700&family=VT323&family=Inter:wght@400;500;700&display=swap" />
+
+<link rel="stylesheet" href="styles.css" />
 </head>
+
 <body>
-  <main class="stage">
-    <div class="confetti" aria-hidden="true"></div>
 
-    <section class="card">
-      <p class="kicker">致我最亲爱的妹妹</p>
-      <h1>生日快乐 🎂</h1>
-      <p class="message">
-        愿你的每一天都被温柔以待，<br />
-        所有的愿望都能慢慢实现。
-      </p>
+<!-- ============== 1. 开场幕：黑底舞台 + 聚光灯 + PRESS PLAY ============== -->
+<section id="curtain" class="scene curtain">
+  <div class="spotlight" aria-hidden="true"></div>
+  <div class="haze" aria-hidden="true"></div>
 
-      <button id="wishBtn" class="wish-btn" type="button">许个愿 ✨</button>
-      <p id="wishText" class="wish-text" hidden></p>
-    </section>
-  </main>
+  <div class="curtain-inner">
+    <p class="kicker chrome">NUOBAO · BIRTHDAY · 2026</p>
+    <h1 class="title-mega">
+      <span class="line">NUOBAO</span>
+      <span class="line accent">·12·</span>
+    </h1>
+    <p class="curtain-sub">点击进入诺宝专属频道 ♡</p>
 
-  <script src="/main.js" defer></script>
+    <button id="playBtn" class="gel-btn" type="button" aria-label="开始">
+      <span class="gel-shine" aria-hidden="true"></span>
+      <span class="gel-label">▶ PRESS&nbsp;PLAY</span>
+    </button>
+
+    <p class="hint">音乐尚未上传 · 视觉先开 · 后续接入 mp3</p>
+  </div>
+
+  <!-- 飘浮装饰（CSS 动画） -->
+  <div class="floaters" aria-hidden="true">
+    <span class="f f-butterfly" style="--x:8%;--y:18%;--d:0s;--s:1.0">🦋</span>
+    <span class="f f-star"      style="--x:18%;--y:78%;--d:.6s;--s:.8">✨</span>
+    <span class="f f-heart"     style="--x:82%;--y:22%;--d:1.2s;--s:1.1">💖</span>
+    <span class="f f-butterfly" style="--x:90%;--y:64%;--d:1.8s;--s:.9">🦋</span>
+    <span class="f f-star"      style="--x:50%;--y:8%; --d:2.4s;--s:.7">⭐</span>
+    <span class="f f-heart"     style="--x:38%;--y:88%;--d:3.0s;--s:.85">💕</span>
+    <span class="f f-bow"       style="--x:70%;--y:84%;--d:3.6s;--s:.9">🎀</span>
+    <span class="f f-cd"        style="--x:14%;--y:42%;--d:0.3s;--s:1.0">💿</span>
+  </div>
+</section>
+
+
+<!-- ============== 2. 杂志封面：粉紫全息渐变 ============== -->
+<section id="cover" class="scene cover hidden">
+  <div class="holo-bg" aria-hidden="true"></div>
+  <div class="grid-bg" aria-hidden="true"></div>
+
+  <header class="mag-top">
+    <span class="mag-logo">NUOBAO<span class="dot">·</span>MAG</span>
+    <span class="mag-issue">VOL.12 · BIRTHDAY ISSUE · 2026</span>
+  </header>
+
+  <div class="mag-cover">
+    <h2 class="mag-title">
+      <span class="row chrome bagel">HAPPY</span>
+      <span class="row pink bagel sticker-rotate">12<sup>TH</sup></span>
+      <span class="row holo bagel">NUOBAO</span>
+    </h2>
+
+    <ul class="mag-bullets">
+      <li>★ 345 张时光档案</li>
+      <li>★ 独家舞台 · ON STAGE</li>
+      <li>★ 12 岁限定刊 · 仅此一本</li>
+    </ul>
+
+    <p class="caveat tag tag-1">小寿星 ✿</p>
+    <p class="caveat tag tag-2">2026!</p>
+    <p class="vt323 tag tag-3">●REC · 12.00.00</p>
+  </div>
+
+  <div class="cover-actions">
+    <button id="enterTimelineBtn" class="gel-btn small" type="button">
+      <span class="gel-shine" aria-hidden="true"></span>
+      <span class="gel-label">▼ 进入时间线</span>
+    </button>
+  </div>
+
+  <div class="floaters" aria-hidden="true">
+    <span class="f f-star"  style="--x:6%; --y:20%;--d:0s;  --s:.7">✨</span>
+    <span class="f f-heart" style="--x:88%;--y:30%;--d:.5s;--s:.9">💗</span>
+    <span class="f f-bow"   style="--x:12%;--y:78%;--d:1s; --s:.8">🎀</span>
+    <span class="f f-star"  style="--x:78%;--y:80%;--d:1.5s;--s:.65">⭐</span>
+  </div>
+</section>
+
+
+<!-- ============== 3. 时间线（雏形 · 等图片优化后填充真实数据） ============== -->
+<section id="timeline" class="scene timeline hidden">
+  <header class="ch-head">
+    <span class="ch-num vt323">CH.01</span>
+    <h3 class="ch-title bagel chrome">2020 · 春</h3>
+    <p class="caveat ch-sub">最早的回忆 · 4 月</p>
+  </header>
+
+  <div class="placeholder-card">
+    <p class="bagel pink">📸 时间线骨架就位</p>
+    <p>下一步：跑图片优化脚本 → 把 345 张照片转成 web 版本，填充进这里。</p>
+    <p class="hint">每一章会用拼贴拍立得 + 涂鸦贴纸 + 霓虹边框区分舞蹈视频</p>
+  </div>
+</section>
+
+<script src="main.js" defer></script>
 </body>
 </html>
