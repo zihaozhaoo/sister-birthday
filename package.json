@@ -4,7 +4,8 @@
   "description": "Birthday site for 诺宝",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build:manifest": "node scripts/build-manifest.mjs"
+    "build:manifest": "node scripts/build-manifest.mjs",
+    "curate": "node scripts/curate-photos.mjs"
   },
   "repository": {
     "type": "git",

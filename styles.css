@@ -81,7 +81,10 @@ button { font: inherit; color: inherit; cursor: pointer; }
     var(--black);
   display: grid;
   place-items: center;
-  padding: 24px;
+  padding-top: 24px;
+  padding-left: 24px;
+  padding-right: 24px;
+  /* padding-bottom 由 .scene 接管，给 pager 留位 */
 }
 
 /* 星空层：用多重 box-shadow 拼出散落的小亮点 */
@@ -329,9 +332,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .cover {
   background:
     linear-gradient(180deg, #ffd6ec 0%, #d8c8ff 55%, #ffe45e 100%);
-  padding: clamp(20px, 4vw, 48px);
+  padding-top: clamp(20px, 4vw, 48px);
+  padding-left: clamp(20px, 4vw, 48px);
+  padding-right: clamp(20px, 4vw, 48px);
+  /* padding-bottom 由 .scene 接管 */
   display: grid;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr;
   gap: clamp(16px, 3vh, 32px);
 }
 
@@ -713,41 +719,223 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 
 /* ============================================================
-   3. TIMELINE — 占位骨架
+   3. TIMELINE — 章节页（与 cover 一致的剪报拼贴视觉宇宙）
    ============================================================ */
 .timeline {
-  background:
-    linear-gradient(180deg, #fff5fb 0%, #ffe1f2 100%);
-  padding: clamp(40px, 8vw, 96px) clamp(20px, 5vw, 64px);
+  background: linear-gradient(180deg, #ffd6ec 0%, #d8c8ff 55%, #ffe45e 100%);
+  padding-top: clamp(40px, 8vh, 96px);
+  padding-left: clamp(20px, 5vw, 64px);
+  padding-right: clamp(20px, 5vw, 64px);
 }
 
+/* 撕纸 — timeline 专属位置（与 cover 不同避免雷同） */
+.paper-lined-tl {
+  top: 4%; left: 1%;
+  width: clamp(180px, 26%, 380px);
+  height: 56%;
+  transform: rotate(-2deg);
+  clip-path: polygon(
+    0 3%, 12% 0, 24% 4%, 38% 1%, 56% 6%, 72% 2%, 88% 5%, 100% 0,
+    98% 18%, 100% 36%, 96% 54%, 100% 72%, 98% 90%, 100% 100%,
+    84% 96%, 68% 100%, 52% 96%, 38% 100%, 22% 96%, 6% 100%, 0 96%,
+    4% 78%, 0 60%, 6% 42%, 0 24%
+  );
+}
+.paper-pink-tl {
+  top: 6%; right: 2%;
+  width: clamp(220px, 36%, 480px);
+  height: 48%;
+  --paper-color: #ffa3d1;
+  transform: rotate(3deg);
+  clip-path: polygon(
+    0 4%, 10% 0, 22% 5%, 36% 1%, 50% 6%, 64% 2%, 78% 5%, 92% 1%, 100% 4%,
+    96% 22%, 100% 38%, 94% 56%, 100% 72%, 96% 88%, 100% 100%,
+    88% 96%, 74% 100%, 60% 96%, 46% 100%, 32% 96%, 18% 100%, 6% 96%, 0 100%,
+    4% 80%, 0 62%, 4% 44%, 0 26%
+  );
+}
+.paper-mint-tl {
+  bottom: 24%; left: 6%;
+  width: clamp(140px, 20%, 280px);
+  height: 28%;
+  --paper-color: #c8f5dc;
+  transform: rotate(-7deg);
+  clip-path: polygon(
+    0 5%, 14% 0, 30% 5%, 48% 1%, 66% 6%, 82% 2%, 100% 5%,
+    96% 26%, 100% 50%, 94% 72%, 100% 100%,
+    82% 96%, 64% 100%, 46% 96%, 28% 100%, 12% 96%, 0 100%,
+    4% 76%, 0 52%, 4% 28%
+  );
+}
+
+/* washi tape — timeline 顶部 */
+.washi-tl-1 {
+  --tape: var(--bubble-pink);
+  top: 3%; left: 32%;
+  width: 22%;
+  transform: rotate(2deg);
+}
+.washi-tl-2 {
+  --tape: var(--cream-yellow);
+  top: 1%; right: 12%;
+  width: 16%;
+  transform: rotate(-4deg);
+}
+
+/* 章节头部 */
 .ch-head {
+  position: relative;
+  z-index: 5;
   display: grid;
-  gap: 8px;
+  gap: clamp(10px, 1.6vh, 16px);
+  justify-items: center;
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: clamp(28px, 5vh, 48px);
 }
-.ch-num {
-  font-size: clamp(14px, 1.4vw, 18px);
-  letter-spacing: .3em;
-  color: var(--neon-violet);
-}
-.ch-title { font-size: clamp(40px, 7vw, 72px); }
-.ch-sub { font-size: clamp(20px, 2.4vw, 28px); color: var(--neon-pink); }
 
-.placeholder-card {
-  max-width: 640px;
+/* CH.01 复古印章风格 */
+.stamp-ch {
+  position: relative;
+  display: inline-block;
+  font-family: var(--f-display);
+  font-size: clamp(14px, 1.4vw, 20px);
+  color: #c41a78;
+  border: 3px solid #c41a78;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .4);
+  transform: rotate(-3deg);
+  opacity: .9;
+  letter-spacing: .15em;
+  top: auto; left: auto;
+}
+
+/* 章节标题 ransom 行 */
+.ransom-ch {
+  display: block;
+  padding: 0;
+}
+.ransom-ch .rl-row { margin: 0 auto; }
+
+/* 中文剪报字母比英文略大些 */
+.rl.cn {
+  font-size: clamp(48px, 10vw, 130px);
+  padding: clamp(6px, 1vw, 14px) clamp(10px, 1.6vw, 22px);
+}
+
+.ch-sub {
+  font-size: clamp(20px, 2.4vw, 28px);
+  color: var(--neon-pink);
+  text-shadow: 1px 1px 0 #fff;
+  font-weight: 700;
+}
+
+/* timeline 装饰元素位置 */
+.flower-tl-1 {
+  position: absolute;
+  z-index: 4;
+  width: clamp(40px, 5vw, 70px);
+  top: 30%; left: 8%;
+  animation: spin-slow 18s linear infinite;
+}
+.flower-tl-2 {
+  position: absolute;
+  z-index: 4;
+  width: clamp(40px, 5vw, 70px);
+  top: 24%; right: 10%;
+  animation: spin-slow 22s linear infinite reverse;
+}
+.star-tl-1 {
+  position: absolute;
+  z-index: 4;
+  width: clamp(36px, 4.5vw, 60px);
+  bottom: 30%; right: 18%;
+  transform: rotate(15deg);
+  animation: stamp-wobble 5s ease-in-out infinite alternate;
+}
+
+.stamp-soon {
+  position: absolute;
+  top: 38%; left: 4%;
+  font-family: var(--f-display);
+  font-size: clamp(12px, 1.4vw, 16px);
+  color: #c41a78;
+  border: 4px double #c41a78;
+  padding: 8px 16px;
+  border-radius: 4px;
+  background: transparent;
+  opacity: .65;
+  transform: rotate(-12deg);
+  z-index: 5;
+  letter-spacing: .15em;
+}
+
+/* timeline 上的散落贴纸 */
+.tag-tl-1 {
+  top: 16%; right: 5%;
+  background: var(--cream-yellow);
+  transform: rotate(8deg);
+  z-index: 5;
+}
+.tag-tl-2 {
+  bottom: 16%; right: 8%;
+  background: var(--mint);
+  transform: rotate(-5deg);
+  z-index: 5;
+}
+
+/* 主内容卡片：米色便签 + 顶部胶带 */
+.memo-card {
+  position: relative;
+  z-index: 5;
+  max-width: 600px;
   margin: 0 auto;
-  background: #fff;
-  border: 3px dashed var(--neon-violet);
-  border-radius: 24px;
-  padding: clamp(24px, 4vw, 40px);
+  background: #fffaf2;
+  border: 2.5px solid var(--ink);
+  border-radius: 4px;
+  padding: clamp(28px, 5vh, 48px) clamp(20px, 4vw, 36px);
+  box-shadow: 6px 8px 0 rgba(26, 0, 40, .18);
   text-align: center;
   display: grid;
-  gap: 12px;
-  box-shadow: 8px 8px 0 var(--bubble-pink);
+  gap: 14px;
+  transform: rotate(-1deg);
 }
-.placeholder-card .pink { color: var(--neon-pink); font-size: clamp(22px, 3vw, 32px); }
+.memo-tape {
+  position: absolute;
+  top: -16px; left: 50%;
+  width: clamp(70px, 10vw, 110px);
+  height: 22px;
+  background: rgba(255, 138, 209, .7);
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0) 4px,
+    rgba(255, 255, 255, .35) 4px,
+    rgba(255, 255, 255, .35) 8px
+  );
+  border: 1px solid rgba(26, 0, 40, .25);
+  transform: translateX(-50%) rotate(-2deg);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8px, #000 calc(100% - 8px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 8px, #000 calc(100% - 8px), transparent 100%);
+}
+.memo-title {
+  font-family: var(--f-display);
+  font-size: clamp(22px, 2.8vw, 32px);
+  color: var(--neon-pink);
+  letter-spacing: .02em;
+  text-shadow: 2px 2px 0 var(--cream-yellow);
+}
+.memo-card p {
+  font-size: clamp(14px, 1.4vw, 16px);
+  line-height: 1.7;
+  color: var(--ink);
+}
+.memo-hint {
+  font-family: var(--f-hand) !important;
+  font-size: clamp(17px, 1.9vw, 22px) !important;
+  color: #6f2dc4 !important;
+  font-weight: 700;
+}
 
 
 /* ============================================================
