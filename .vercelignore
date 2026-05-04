@@ -1,0 +1,21 @@
+# 给 Vercel CLI 的显式忽略 — .gitignore 在上次部署时没被完整读取
+# 1.8 GB 原图本地用，绝不上 CDN
+photos-source
+
+# 节点依赖（sharp/exifr 仅供本地脚本，不进运行时）
+node_modules
+
+# 调试时的对照输出
+data/comparison
+
+# 本地脚本与配置
+scripts
+.DS_Store
+.env
+.env.local
+*.log
+.vercel
+
+# 数据建议保留 photos.json，但不要 keep.txt / drop.txt 等私人备注
+data/keep.txt
+data/drop.txt
