@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "outputDirectory": ".",
+  "buildCommand": "echo 'static site — no build needed'",
+  "installCommand": "echo 'sharp/exifr are dev-only, skipping install'",
+  "headers": [
+    {
+      "source": "/public/photos/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/data/photos.json",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=300, must-revalidate" }
+      ]
+    },
+    {
+      "source": "/(styles\\.css|main\\.js|chapters\\.js)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" }
+      ]
+    }
+  ]
+}
