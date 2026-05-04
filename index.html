@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link rel="stylesheet"
-  href="https://fonts.googleapis.com/css2?family=Bagel+Fat+One&family=Caveat:wght@600;700&family=VT323&family=Inter:wght@400;500;700&display=swap" />
+  href="https://fonts.googleapis.com/css2?family=Anton&family=Bagel+Fat+One&family=Bebas+Neue&family=Bowlby+One&family=Bungee&family=Caveat:wght@600;700&family=Frijole&family=Inter:wght@400;500;700&family=Permanent+Marker&family=Rubik+Mono+One&family=Shrikhand&family=VT323&display=swap" />
 
 <link rel="stylesheet" href="styles.css" />
 </head>
@@ -20,6 +20,23 @@
 <section id="curtain" class="scene curtain">
   <div class="spotlight" aria-hidden="true"></div>
   <div class="haze" aria-hidden="true"></div>
+
+  <!-- 霓虹 washi tape 角落 -->
+  <span class="washi-curtain" aria-hidden="true"></span>
+
+  <!-- 角落手画爆炸星（霓虹色） -->
+  <svg class="doodle-burst doodle-burst-1" viewBox="0 0 100 100" aria-hidden="true">
+    <path d="M50 6 L58 38 L92 42 L62 58 L72 92 L50 68 L28 92 L38 58 L8 42 L42 38 Z"
+      fill="none" stroke="#ffe45e" stroke-width="3" stroke-linejoin="round"/>
+  </svg>
+  <svg class="doodle-burst doodle-burst-2" viewBox="0 0 100 100" aria-hidden="true">
+    <path d="M50 12 L56 44 L86 46 L60 60 L70 88 L50 70 L30 88 L40 60 L14 46 L44 44 Z"
+      fill="none" stroke="#ff2e9f" stroke-width="3" stroke-linejoin="round"/>
+  </svg>
+  <svg class="doodle-burst doodle-burst-3" viewBox="0 0 100 100" aria-hidden="true">
+    <path d="M50 8 L57 40 L90 44 L60 58 L72 92 L50 70 L28 92 L40 58 L10 44 L43 40 Z"
+      fill="none" stroke="#00e5ff" stroke-width="3" stroke-linejoin="round"/>
+  </svg>
 
   <div class="curtain-inner">
     <p class="kicker chrome">NUOBAO · BIRTHDAY · 2026</p>
@@ -37,16 +54,32 @@
     <p class="hint">音乐尚未上传 · 视觉先开 · 后续接入 mp3</p>
   </div>
 
-  <!-- 飘浮装饰（CSS 动画） -->
+  <!-- "点这里 ♡" 手写注释 + 弯弯箭头从右上指向 PRESS PLAY -->
+  <p class="handnote-here" aria-hidden="true">点这里 ♡</p>
+  <svg class="doodle-pointdown" viewBox="0 0 120 80" aria-hidden="true">
+    <path d="M110 10 Q 80 40, 50 55 Q 25 62, 12 72"
+      fill="none" stroke="#ffe45e" stroke-width="3.5" stroke-linecap="round"/>
+    <path d="M22 62 L 10 74 L 24 78"
+      fill="none" stroke="#ffe45e" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </svg>
+
+  <!-- 飘浮装饰（数量 + 尺寸都加大） -->
   <div class="floaters" aria-hidden="true">
-    <span class="f f-butterfly" style="--x:8%;--y:18%;--d:0s;--s:1.0">🦋</span>
-    <span class="f f-star"      style="--x:18%;--y:78%;--d:.6s;--s:.8">✨</span>
-    <span class="f f-heart"     style="--x:82%;--y:22%;--d:1.2s;--s:1.1">💖</span>
-    <span class="f f-butterfly" style="--x:90%;--y:64%;--d:1.8s;--s:.9">🦋</span>
-    <span class="f f-star"      style="--x:50%;--y:8%; --d:2.4s;--s:.7">⭐</span>
-    <span class="f f-heart"     style="--x:38%;--y:88%;--d:3.0s;--s:.85">💕</span>
-    <span class="f f-bow"       style="--x:70%;--y:84%;--d:3.6s;--s:.9">🎀</span>
-    <span class="f f-cd"        style="--x:14%;--y:42%;--d:0.3s;--s:1.0">💿</span>
+    <span class="f f-butterfly" style="--x:6%; --y:14%;--d:0s;  --s:1.1">🦋</span>
+    <span class="f f-butterfly" style="--x:88%;--y:62%;--d:1.8s;--s:1.0">🦋</span>
+    <span class="f f-butterfly" style="--x:72%;--y:10%;--d:3.2s;--s:.9">🦋</span>
+    <span class="f f-star"      style="--x:18%;--y:78%;--d:.6s;--s:1.0">✨</span>
+    <span class="f f-star"      style="--x:50%;--y:6%; --d:2.4s;--s:.85">⭐</span>
+    <span class="f f-star"      style="--x:62%;--y:88%;--d:1.2s;--s:.9">🌟</span>
+    <span class="f f-sparkle"   style="--x:34%;--y:14%;--d:0.8s;--s:1.0">✨</span>
+    <span class="f f-sparkle"   style="--x:84%;--y:82%;--d:1.6s;--s:.9">✨</span>
+    <span class="f f-heart"     style="--x:90%;--y:24%;--d:1.2s;--s:1.15">💖</span>
+    <span class="f f-heart"     style="--x:38%;--y:90%;--d:3.0s;--s:1.0">💕</span>
+    <span class="f f-heart"     style="--x:8%; --y:64%;--d:2.0s;--s:.9">💗</span>
+    <span class="f f-bow"       style="--x:78%;--y:78%;--d:3.6s;--s:1.0">🎀</span>
+    <span class="f f-cd"        style="--x:12%;--y:42%;--d:0.3s;--s:1.0">💿</span>
+    <span class="f f-rainbow"   style="--x:80%;--y:38%;--d:1.4s;--s:1.0">🌈</span>
+    <span class="f f-gift"      style="--x:24%;--y:30%;--d:2.6s;--s:1.0">🎁</span>
   </div>
 </section>
 
@@ -67,10 +100,36 @@
   </header>
 
   <div class="mag-cover">
-    <h2 class="mag-title">
-      <span class="row chrome bagel">HAPPY</span>
-      <span class="row pink bagel sticker-rotate">12<sup>TH</sup></span>
-      <span class="row holo bagel">NUOBAO</span>
+    <!-- 横线纸大块作底层（左侧） -->
+    <div class="paper paper-lined paper-lined-1" aria-hidden="true"></div>
+    <!-- 粉色撕纸大块作底层（右侧 / 中央） -->
+    <div class="paper paper-pink paper-pink-1" aria-hidden="true"></div>
+    <!-- 薄荷绿小撕纸（角落） -->
+    <div class="paper paper-mint paper-mint-1" aria-hidden="true"></div>
+
+    <!-- 剪报拼贴标题：每个字母从"不同杂志"剪下来，字体颜色背景全不一样 -->
+    <h2 class="ransom" aria-label="HAPPY 12TH NUOBAO">
+      <span class="rl-row">
+        <span class="rl" style="--bg:#fffafd;--c:#1a0028;--rot:-4deg;--font:'Bowlby One',sans-serif">H</span>
+        <span class="rl" style="--bg:#ffe45e;--c:#c41a78;--rot:5deg;--font:Anton,sans-serif">A</span>
+        <span class="rl" style="--bg:#ffb3da;--c:#1a2c8c;--rot:-2deg;--font:'Permanent Marker',cursive">P</span>
+        <span class="rl" style="--bg:#c8e8ff;--c:#1d6b3a;--rot:6deg;--font:Bungee,sans-serif">P</span>
+        <span class="rl" style="--bg:#ffffff;--c:#f06b1c;--rot:-3deg;--font:'Rubik Mono One',sans-serif">Y</span>
+      </span>
+      <span class="rl-row rl-row-12">
+        <span class="rl big" style="--bg:#ff8ad1;--c:#1a0028;--rot:3deg;--font:Shrikhand,serif">1</span>
+        <span class="rl big" style="--bg:#ffffff;--c:#c41a78;--rot:-4deg;--font:'Bowlby One',sans-serif">2</span>
+        <span class="rl small" style="--bg:#b8ffd9;--c:#1a0028;--rot:8deg;--font:Georgia,serif">T</span>
+        <span class="rl small" style="--bg:#ffe45e;--c:#1a0028;--rot:-6deg;--font:'Bebas Neue',sans-serif">H</span>
+      </span>
+      <span class="rl-row">
+        <span class="rl" style="--bg:#fffafd;--c:#6f2dc4;--rot:-3deg;--font:Anton,sans-serif">N</span>
+        <span class="rl" style="--bg:#d8c8ff;--c:#1a0028;--rot:5deg;--font:'Permanent Marker',cursive">U</span>
+        <span class="rl" style="--bg:#ffcfa8;--c:#c41a78;--rot:-2deg;--font:Bungee,sans-serif">O</span>
+        <span class="rl" style="--bg:#b8ffd9;--c:#1a2c8c;--rot:7deg;--font:'Rubik Mono One',sans-serif">B</span>
+        <span class="rl" style="--bg:#ffb3da;--c:#1d6b3a;--rot:-4deg;--font:Frijole,cursive">A</span>
+        <span class="rl" style="--bg:#ffe45e;--c:#1a0028;--rot:3deg;--font:'Bowlby One',sans-serif">O</span>
+      </span>
     </h2>
 
     <!-- 手画虚线圈圈住 12，配手写注释 -->

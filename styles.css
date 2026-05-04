@@ -68,15 +68,36 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 
 /* ============================================================
-   1. CURTAIN — 开场幕（A 舞台聚光灯）
+   1. CURTAIN — 开场幕（A 舞台聚光灯 × 星空 × 手帐涂鸦）
    ============================================================ */
 .curtain {
   background:
+    radial-gradient(ellipse 90% 70% at 50% 30%, rgba(255, 100, 200, .18) 0%, transparent 60%),
     radial-gradient(ellipse 80% 60% at 50% 30%, #2a0040 0%, transparent 60%),
+    radial-gradient(circle at 20% 75%, rgba(157, 78, 255, .25) 0%, transparent 35%),
+    radial-gradient(circle at 80% 65%, rgba(255, 46, 159, .2) 0%, transparent 35%),
     var(--black);
   display: grid;
   place-items: center;
   padding: 24px;
+}
+
+/* 星空层：用多重 box-shadow 拼出散落的小亮点 */
+.curtain::before {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    radial-gradient(circle, rgba(255, 255, 255, .9) 1px, transparent 2px),
+    radial-gradient(circle, rgba(255, 200, 235, .6) 1px, transparent 2px);
+  background-size: 80px 90px, 130px 110px;
+  background-position: 20px 30px, 50px 70px;
+  opacity: .55;
+  pointer-events: none;
+  animation: star-twinkle 4s ease-in-out infinite alternate;
+}
+@keyframes star-twinkle {
+  0%   { opacity: .35; }
+  100% { opacity: .7; }
 }
 
 .spotlight {
@@ -164,6 +185,73 @@ button { font: inherit; color: inherit; cursor: pointer; }
   letter-spacing: .12em;
 }
 
+/* 开场幕专属手帐元素 */
+.curtain .washi-curtain {
+  position: absolute;
+  top: 6%; left: -4%;
+  width: 28%;
+  height: clamp(28px, 3.4vw, 42px);
+  background:
+    repeating-linear-gradient(45deg,
+      rgba(255, 255, 255, 0) 0px,
+      rgba(255, 255, 255, 0) 8px,
+      rgba(255, 255, 255, .25) 8px,
+      rgba(255, 255, 255, .25) 16px),
+    linear-gradient(90deg, var(--neon-pink) 0%, var(--neon-violet) 100%);
+  opacity: .75;
+  transform: rotate(-7deg);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
+  z-index: 3;
+  filter: drop-shadow(0 0 14px rgba(255, 46, 159, .5));
+}
+
+.curtain .doodle-pointdown {
+  position: absolute;
+  z-index: 4;
+  width: clamp(70px, 9vw, 130px);
+  /* 在 PRESS PLAY 按钮上方斜插的"点这里!"箭头 */
+  bottom: 26%; right: 18%;
+  transform: rotate(20deg);
+  filter: drop-shadow(0 0 8px rgba(255, 230, 80, .6));
+  animation: pointdown-bob 1.6s ease-in-out infinite alternate;
+}
+.curtain .handnote-here {
+  position: absolute;
+  z-index: 4;
+  bottom: 30%; right: 8%;
+  font-family: var(--f-hand);
+  font-size: clamp(22px, 2.4vw, 32px);
+  color: var(--cream-yellow);
+  text-shadow: 0 0 12px rgba(255, 230, 80, .7), 2px 2px 0 rgba(0, 0, 0, .5);
+  font-weight: 700;
+  animation: handnote-bob 1.6s ease-in-out infinite alternate;
+}
+@keyframes pointdown-bob {
+  0%   { transform: rotate(20deg) translateY(0); }
+  100% { transform: rotate(18deg) translateY(6px); }
+}
+@keyframes handnote-bob {
+  0%   { transform: rotate(-8deg) translateY(0); }
+  100% { transform: rotate(-6deg) translateY(4px); }
+}
+
+/* 角落爆炸星（霓虹手画风） */
+.curtain .doodle-burst {
+  position: absolute;
+  z-index: 3;
+  width: clamp(60px, 7vw, 110px);
+  filter: drop-shadow(0 0 14px rgba(255, 230, 80, .85));
+  pointer-events: none;
+}
+.curtain .doodle-burst-1 { top: 14%; left: 6%;  animation: burst-pulse 2s ease-in-out infinite alternate; }
+.curtain .doodle-burst-2 { top: 22%; right: 10%; animation: burst-pulse 2.6s ease-in-out infinite alternate; }
+.curtain .doodle-burst-3 { bottom: 14%; left: 14%; animation: burst-pulse 2.2s ease-in-out infinite alternate; }
+@keyframes burst-pulse {
+  0%   { transform: scale(.9) rotate(0deg);  opacity: .8; }
+  100% { transform: scale(1.1) rotate(15deg); opacity: 1; }
+}
+
 
 /* ---------- 通用：果冻按钮（gel） ---------- */
 .gel-btn {
@@ -213,20 +301,24 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .f {
   position: absolute;
   left: var(--x); top: var(--y);
-  font-size: calc(28px * var(--s, 1));
+  /* 自适应尺寸：手机 36px，桌面 ~72px */
+  font-size: calc(clamp(32px, 4.2vw, 72px) * var(--s, 1));
   animation: float-y 6s ease-in-out infinite alternate;
   animation-delay: var(--d, 0s);
-  filter: drop-shadow(0 0 8px rgba(255, 200, 235, .6));
+  filter: drop-shadow(0 0 12px rgba(255, 200, 235, .7));
 }
 .f-butterfly { animation-name: float-butterfly; animation-duration: 8s; }
 .f-star      { animation-name: twinkle;          animation-duration: 1.8s; }
 .f-heart     { animation-name: float-y;          animation-duration: 5s; }
 .f-bow       { animation-name: wiggle;           animation-duration: 4s; }
 .f-cd        {
-  font-size: calc(38px * var(--s, 1));
+  font-size: calc(clamp(44px, 5.4vw, 96px) * var(--s, 1));
   animation: spin-cd 6s linear infinite;
-  filter: drop-shadow(0 0 12px rgba(0, 229, 255, .65));
+  filter: drop-shadow(0 0 16px rgba(0, 229, 255, .7));
 }
+.f-rainbow   { animation-name: float-y; animation-duration: 7s; }
+.f-gift      { animation-name: wiggle;  animation-duration: 5s; }
+.f-sparkle   { animation-name: twinkle; animation-duration: 2.4s; filter: drop-shadow(0 0 14px rgba(255, 230, 80, .85)); }
 
 
 /* ============================================================
@@ -285,45 +377,152 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .mag-logo .dot { color: var(--neon-pink); }
 
 .mag-cover {
+  position: relative;
   display: grid;
   align-content: center;
   justify-items: center;
   gap: clamp(14px, 2vh, 24px);
   padding: clamp(20px, 4vh, 40px) 0;
+  min-height: 70vh;
 }
 
-.mag-title {
+/* ============================================================
+   纸张层（横线纸 / 粉色撕纸 / 薄荷绿撕纸）
+   ============================================================ */
+.paper {
+  position: absolute;
+  z-index: 1;
+  filter: drop-shadow(4px 6px 14px rgba(26, 0, 40, .18));
+}
+
+/* 横线纸大块（底层） */
+.paper-lined {
+  background:
+    repeating-linear-gradient(
+      transparent 0,
+      transparent 28px,
+      rgba(140, 180, 240, .55) 28px,
+      rgba(140, 180, 240, .55) 29px
+    ),
+    #fdfdff;
+}
+.paper-lined::before {
+  content: "";
+  position: absolute;
+  left: 22px; top: 0; bottom: 0;
+  width: 2px;
+  background: rgba(255, 100, 130, .6);
+}
+.paper-lined-1 {
+  top: 6%; left: 2%;
+  width: clamp(220px, 32%, 480px);
+  height: 84%;
+  transform: rotate(-3deg);
+  clip-path: polygon(
+    0 3%, 12% 0, 24% 4%, 38% 1%, 56% 6%, 72% 2%, 88% 5%, 100% 0,
+    98% 18%, 100% 36%, 96% 54%, 100% 72%, 98% 90%, 100% 100%,
+    84% 96%, 68% 100%, 52% 96%, 38% 100%, 22% 96%, 6% 100%, 0 96%,
+    4% 78%, 0 60%, 6% 42%, 0 24%
+  );
+}
+
+/* 粉色大撕纸（标题层后面） */
+.paper-pink {
+  background: var(--paper-color, #ffa3d1);
+  z-index: 2;
+}
+.paper-pink-1 {
+  top: 14%; right: 4%;
+  width: clamp(280px, 56%, 720px);
+  height: 70%;
+  --paper-color: #ffa3d1;
+  transform: rotate(2deg);
+  clip-path: polygon(
+    0 4%, 10% 0, 22% 5%, 36% 1%, 50% 6%, 64% 2%, 78% 5%, 92% 1%, 100% 4%,
+    96% 22%, 100% 38%, 94% 56%, 100% 72%, 96% 88%, 100% 100%,
+    88% 96%, 74% 100%, 60% 96%, 46% 100%, 32% 96%, 18% 100%, 6% 96%, 0 100%,
+    4% 80%, 0 62%, 4% 44%, 0 26%
+  );
+}
+
+/* 薄荷绿小撕纸（角落点缀） */
+.paper-mint {
+  background: var(--paper-color, #b8ffd9);
+  z-index: 1;
+}
+.paper-mint-1 {
+  bottom: 8%; right: 6%;
+  width: clamp(120px, 22%, 260px);
+  height: 28%;
+  --paper-color: #c8f5dc;
+  transform: rotate(-6deg);
+  clip-path: polygon(
+    0 5%, 14% 0, 30% 5%, 48% 1%, 66% 6%, 82% 2%, 100% 5%,
+    96% 26%, 100% 50%, 94% 72%, 100% 100%,
+    82% 96%, 64% 100%, 46% 96%, 28% 100%, 12% 96%, 0 100%,
+    4% 76%, 0 52%, 4% 28%
+  );
+}
+
+/* ============================================================
+   RANSOM 剪报拼贴字母
+   ============================================================ */
+.ransom {
+  position: relative;
+  z-index: 4;
   display: grid;
-  gap: 4px;
+  gap: clamp(6px, 1.2vh, 14px);
   text-align: center;
-  line-height: .88;
+  line-height: 1;
+  padding: 4vh 2vw;
 }
-.mag-title .row { font-size: clamp(56px, 16vw, 200px); }
-.mag-title .chrome {
-  background: linear-gradient(180deg, #fff 0%, #c5c5ff 40%, #5d5d8b 55%, #fff 70%, #b8b8e0 100%);
-  -webkit-background-clip: text;
-          background-clip: text;
-  color: transparent;
-  -webkit-text-stroke: 2px rgba(26, 0, 40, .25);
-  filter: drop-shadow(0 6px 0 rgba(157, 78, 255, .35));
+.rl-row {
+  display: inline-flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(2px, .4vw, 6px);
 }
-.mag-title .pink {
-  color: var(--neon-pink);
-  -webkit-text-stroke: 3px var(--ink);
-  filter:
-    drop-shadow(4px 4px 0 var(--cream-yellow))
-    drop-shadow(0 0 30px rgba(255, 46, 159, .4));
+.rl {
+  display: inline-block;
+  padding: clamp(4px, .8vw, 12px) clamp(8px, 1.4vw, 20px);
+  background: var(--bg, #fff);
+  color: var(--c, #1a0028);
+  transform: rotate(var(--rot, 0deg));
+  font-family: var(--font, "Bowlby One", sans-serif);
+  font-size: clamp(38px, 8.5vw, 110px);
+  line-height: .9;
+  font-weight: 900;
+  letter-spacing: .01em;
+  /* 纸贴在纸上的层叠阴影 */
+  box-shadow:
+    2px 3px 0 rgba(26, 0, 40, .28),
+    0 1px 3px rgba(0, 0, 0, .15);
+  /* 微小不规则边模拟剪刀剪过 */
+  border-radius: 2px;
+  position: relative;
 }
-.mag-title .holo {
-  background: linear-gradient(120deg, #ff2e9f 0%, #b5a9ff 45%, #00e5ff 70%, #ffe45e 100%);
-  -webkit-background-clip: text;
-          background-clip: text;
-  color: transparent;
-  -webkit-text-stroke: 2px var(--ink);
-  filter: drop-shadow(3px 3px 0 rgba(0, 0, 0, .15));
+.rl.big {
+  font-size: clamp(72px, 16vw, 200px);
+  padding: clamp(8px, 1.4vw, 18px) clamp(14px, 2.4vw, 30px);
+  box-shadow:
+    3px 4px 0 rgba(26, 0, 40, .3),
+    0 2px 6px rgba(0, 0, 0, .18);
 }
-.sticker-rotate { transform: rotate(-4deg); }
-.mag-title sup { font-size: .35em; vertical-align: super; }
+.rl.small {
+  font-size: clamp(24px, 5vw, 60px);
+  padding: clamp(4px, .6vw, 8px) clamp(6px, 1vw, 14px);
+}
+
+/* 字母在 hover 时轻微弹起，强调"剪贴"质感 */
+.rl { transition: transform .2s ease, box-shadow .2s ease; }
+.rl:hover {
+  transform: rotate(var(--rot, 0deg)) translateY(-3px) scale(1.06);
+  z-index: 10;
+  box-shadow:
+    3px 6px 0 rgba(26, 0, 40, .3),
+    0 4px 12px rgba(0, 0, 0, .25);
+}
 
 .mag-bullets {
   list-style: none;
@@ -334,6 +533,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   font-size: clamp(15px, 1.6vw, 20px);
   color: var(--ink);
   letter-spacing: .08em;
+  position: relative;
+  z-index: 4;
 }
 
 /* 散落贴纸 / 便签纸 */
@@ -421,15 +622,15 @@ button { font: inherit; color: inherit; cursor: pointer; }
   filter: drop-shadow(2px 2px 0 rgba(26, 0, 40, .15));
 }
 
-/* 圈住 "12" 的虚线椭圆 */
+/* 圈住 "12" 的虚线椭圆（在标题中间那一行附近） */
 .doodle-circle {
-  width: clamp(180px, 28vw, 360px);
+  width: clamp(220px, 32vw, 460px);
   aspect-ratio: 200 / 120;
-  /* 视觉上对齐到 12 那一行（标题三行的中间） */
-  top: 48%; left: 50%;
+  top: 50%; left: 50%;
   transform: translate(-50%, -50%) rotate(-3deg);
-  z-index: 2;
+  z-index: 5;
   animation: doodle-wobble 4s ease-in-out infinite alternate;
+  filter: drop-shadow(2px 2px 0 rgba(26, 0, 40, .12));
 }
 
 /* 从右侧延伸的手画箭头，指向 12 */
@@ -506,7 +707,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
   padding: 8px 18px;
 }
 
-.cover-actions { display: grid; place-items: center; }
+.cover-actions { display: grid; place-items: center; position: relative; z-index: 5; }
 
 
 /* ============================================================
