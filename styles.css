@@ -853,3 +853,94 @@ button { font: inherit; color: inherit; cursor: pointer; }
     animation-iteration-count: 1 !important;
   }
 }
+
+
+/* ============================================================
+   PAGER — 翻页导航（固定底部，剪报贴纸风格）
+   ============================================================ */
+.pager {
+  position: fixed;
+  left: 50%;
+  bottom: clamp(12px, 2.5vh, 28px);
+  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
+  gap: clamp(8px, 1.4vw, 16px);
+  z-index: 100;
+  padding: 6px 10px;
+  background: rgba(255, 255, 255, .65);
+  backdrop-filter: blur(10px);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 4px 5px 0 rgba(26, 0, 40, .25);
+}
+
+.pager-btn {
+  background: var(--btn-bg, #fff);
+  color: var(--ink);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: clamp(8px, 1.2vh, 12px) clamp(12px, 1.6vw, 20px);
+  font-family: var(--f-display);
+  font-size: clamp(13px, 1.3vw, 16px);
+  letter-spacing: .04em;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform .15s ease, box-shadow .15s ease, opacity .2s ease;
+  /* 触摸目标 */
+  min-height: 40px;
+}
+.pager-prev { --btn-bg: #ffe45e; }
+.pager-next { --btn-bg: #ff8ad1; color: var(--ink); }
+
+.pager-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  box-shadow: 4px 5px 0 var(--ink);
+}
+.pager-btn:active {
+  transform: translateY(1px);
+  box-shadow: 1px 2px 0 var(--ink);
+}
+.pager-btn:disabled {
+  opacity: .25;
+  pointer-events: none;
+  filter: grayscale(.6);
+}
+
+.pager-icon {
+  font-size: 1em;
+  line-height: 1;
+}
+
+/* 页面指示点（剪报星形贴纸） */
+.pager-dots {
+  list-style: none;
+  display: inline-flex;
+  gap: 6px;
+  padding: 0;
+  margin: 0;
+}
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: rgba(26, 0, 40, .15);
+  border: 2px solid var(--ink);
+  transition: all .25s ease;
+}
+.dot.active {
+  background: var(--neon-pink);
+  width: 28px;
+  border-radius: 999px;
+  box-shadow: 0 0 12px rgba(255, 46, 159, .55), 2px 2px 0 var(--ink);
+}
+
+/* 手机上 pager 简化：隐藏 label 文字，只留图标 */
+@media (max-width: 540px) {
+  .pager-label { display: none; }
+  .pager-btn { padding: 10px 14px; font-size: 18px; }
+  .pager { padding: 5px 8px; gap: 8px; }
+}

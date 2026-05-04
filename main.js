@@ -1,27 +1,79 @@
-// 场景切换 + 像素闪粉跟随光标
+// 场景切换 + 翻页导航（按钮 / 键盘 / 触摸滑动）+ 像素闪粉跟随光标
 // 音频接入留 TODO，等 mp3 到位再补
 
 const $ = (sel) => document.querySelector(sel);
+const $$ = (sel) => document.querySelectorAll(sel);
 
-const curtain = $("#curtain");
-const cover = $("#cover");
-const timeline = $("#timeline");
-const playBtn = $("#playBtn");
-const enterBtn = $("#enterTimelineBtn");
+const scenes = [$("#curtain"), $("#cover"), $("#timeline")];
+let currentIdx = 0;
 
-function showScene(el) {
-  [curtain, cover, timeline].forEach((s) => s.classList.add("hidden"));
-  el.classList.remove("hidden");
-  el.classList.add("show");
-  el.scrollIntoView({ behavior: "smooth", block: "start" });
+function show(target) {
+  const idx = Math.max(0, Math.min(scenes.length - 1, target));
+  if (idx === currentIdx) return;
+
+  scenes.forEach((s, j) => {
+    s.classList.toggle("hidden", j !== idx);
+    s.classList.toggle("show", j === idx);
+  });
+  scenes[idx].scrollIntoView({ behavior: "smooth", block: "start" });
+  currentIdx = idx;
+  updatePager();
 }
 
-playBtn.addEventListener("click", () => {
-  // TODO: audio.play() 等 mp3 接入
-  showScene(cover);
+function updatePager() {
+  $$(".pager-dots .dot").forEach((d, j) => d.classList.toggle("active", j === currentIdx));
+  prevBtn.disabled = currentIdx === 0;
+  nextBtn.disabled = currentIdx === scenes.length - 1;
+}
+
+// 主 CTA（PRESS PLAY / 进入时间线）+ 翻页按钮
+$("#playBtn").addEventListener("click", () => show(1));
+$("#enterTimelineBtn").addEventListener("click", () => show(2));
+
+const prevBtn = $("#prevBtn");
+const nextBtn = $("#nextBtn");
+prevBtn.addEventListener("click", () => show(currentIdx - 1));
+nextBtn.addEventListener("click", () => show(currentIdx + 1));
+
+// 键盘快捷键：↑↓←→ / PageUp/Down / 空格
+document.addEventListener("keydown", (e) => {
+  const tag = (e.target.tagName || "").toUpperCase();
+  if (tag === "INPUT" || tag === "TEXTAREA") return;
+
+  const next = ["ArrowDown", "ArrowRight", "PageDown", " "];
+  const prev = ["ArrowUp", "ArrowLeft", "PageUp"];
+  if (next.includes(e.key)) {
+    e.preventDefault();
+    show(currentIdx + 1);
+  } else if (prev.includes(e.key)) {
+    e.preventDefault();
+    show(currentIdx - 1);
+  }
 });
 
-enterBtn.addEventListener("click", () => showScene(timeline));
+// 触摸滑动：上滑 = 下一页，下滑 = 上一页
+let touchStartY = null;
+document.addEventListener(
+  "touchstart",
+  (e) => {
+    if (e.target.closest("button, a")) return;
+    touchStartY = e.touches[0].clientY;
+  },
+  { passive: true }
+);
+document.addEventListener(
+  "touchend",
+  (e) => {
+    if (touchStartY === null) return;
+    if (e.target.closest("button, a")) return;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    touchStartY = null;
+    if (Math.abs(dy) > 80) show(currentIdx + (dy < 0 ? 1 : -1));
+  },
+  { passive: true }
+);
+
+updatePager();
 
 
 // ====== 像素闪粉粒子（光标 / 触摸跟随） ======
@@ -65,7 +117,10 @@ styleSheet.textContent = `
 document.head.appendChild(styleSheet);
 
 document.addEventListener("pointermove", (e) => spawnSparkle(e.clientX, e.clientY));
-document.addEventListener("touchmove", (e) => {
-  const t = e.touches[0];
-  if (t) spawnSparkle(t.clientX, t.clientY);
-}, { passive: true });
+document.addEventListener("touchmove",
+  (e) => {
+    const t = e.touches[0];
+    if (t) spawnSparkle(t.clientX, t.clientY);
+  },
+  { passive: true }
+);
