@@ -42,11 +42,8 @@ function bindNavigation() {
   prevBtn = $("#prevBtn");
   nextBtn = $("#nextBtn");
 
-  // PRESS PLAY 同时承担「音频解锁」（iOS 要求 sync 调用 .play()）
-  $("#playBtn").addEventListener("click", () => {
-    armMusic();
-    show(1);
-  });
+  // 音频解锁已由 bindPressPlayEarly 提前绑好；这里只挂场景跳转
+  $("#playBtn").addEventListener("click", () => show(1));
   prevBtn.addEventListener("click", () => show(currentIdx - 1));
   nextBtn.addEventListener("click", () => show(currentIdx + 1));
 
@@ -144,6 +141,7 @@ function bindSparkles() {
 
 // ====== 背景音乐（PRESS PLAY 解锁 + 右上角随时切换） ======
 let audio, musicToggle;
+let pendingRetry = false; // 浏览器拒绝过 play() 时挂的全局兜底
 
 function setMusicState(playing) {
   if (!musicToggle) return;
@@ -154,47 +152,81 @@ function setMusicState(playing) {
   if (state) state.textContent = playing ? "ON" : "OFF";
 }
 
-function armMusic() {
-  if (!audio || !audio.paused) return;
-  // 必须在 click handler 同步路径里调，iOS 才放行
+function tryPlay() {
+  if (!audio) return Promise.reject(new Error("no audio el"));
   const p = audio.play();
-  if (p && typeof p.then === "function") {
-    p.then(() => setMusicState(true)).catch((err) => {
-      // eslint-disable-next-line no-console
-      console.warn("[bgm] play blocked:", err && err.message);
-    });
-  } else {
+  if (!p || typeof p.then !== "function") {
     setMusicState(true);
+    return Promise.resolve();
   }
+  return p.then(() => {
+    setMusicState(true);
+    pendingRetry = false;
+  });
+}
+
+function armRetryFallback() {
+  if (pendingRetry) return;
+  pendingRetry = true;
+  // 只要用户在页面上再点 / 触摸 / 按键一次，就重试一次
+  const retry = () => {
+    document.removeEventListener("click", retry, true);
+    document.removeEventListener("touchend", retry, true);
+    document.removeEventListener("keydown", retry, true);
+    tryPlay().catch(() => {
+      // 第二次还失败说明是权限/系统级（iOS 静音键），交给用户自己点右上角
+      pendingRetry = false;
+    });
+  };
+  document.addEventListener("click", retry, true);
+  document.addEventListener("touchend", retry, true);
+  document.addEventListener("keydown", retry, true);
+}
+
+function armMusic() {
+  if (!audio) return;
+  if (!audio.paused) return;
+  tryPlay().catch((err) => {
+    // eslint-disable-next-line no-console
+    console.warn("[bgm] play blocked:", err && err.message);
+    armRetryFallback();
+  });
 }
 
 function bindMusic() {
-  audio = $("#bgm");
-  musicToggle = $("#musicToggle");
+  audio = document.getElementById("bgm");
+  musicToggle = document.getElementById("musicToggle");
   if (!audio || !musicToggle) return;
 
-  audio.volume = 0.65;
+  audio.volume = 0.85;
 
   musicToggle.addEventListener("click", () => {
     if (audio.paused) {
-      const p = audio.play();
-      if (p && typeof p.then === "function") {
-        p.then(() => setMusicState(true)).catch(() => setMusicState(false));
-      } else {
-        setMusicState(true);
-      }
+      tryPlay().catch(() => setMusicState(false));
     } else {
       audio.pause();
       setMusicState(false);
     }
   });
 
-  // 同步事件（比如标签页切走再回来 / 浏览器自动暂停）
+  // 浏览器自动暂停 / 切标签页时同步状态
   audio.addEventListener("play", () => setMusicState(true));
   audio.addEventListener("pause", () => setMusicState(false));
 }
 
+// 在 chapters 还没加载好时就把 PRESS PLAY 的「音频解锁」绑上，
+// 避免用户看见按钮就点、但 click handler 还没注册的竞态。
+function bindPressPlayEarly() {
+  const playBtn = document.getElementById("playBtn");
+  if (!playBtn) return;
+  playBtn.addEventListener("click", armMusic, { once: false });
+}
+
 async function init() {
+  // 音频元素 + PRESS PLAY 解锁：在 chapters 异步加载之前先绑好
+  bindMusic();
+  bindPressPlayEarly();
+
   try {
     await window.NB.buildChapters();
   } catch (err) {
@@ -217,7 +249,6 @@ async function init() {
   scenes = [...$$(".scene")];
   renderPagerDots(scenes.length);
   bindNavigation();
-  bindMusic();
   bindSparkles();
   updatePager();
 }
