@@ -42,7 +42,11 @@ function bindNavigation() {
   prevBtn = $("#prevBtn");
   nextBtn = $("#nextBtn");
 
-  $("#playBtn").addEventListener("click", () => show(1));
+  // PRESS PLAY 同时承担「音频解锁」（iOS 要求 sync 调用 .play()）
+  $("#playBtn").addEventListener("click", () => {
+    armMusic();
+    show(1);
+  });
   prevBtn.addEventListener("click", () => show(currentIdx - 1));
   nextBtn.addEventListener("click", () => show(currentIdx + 1));
 
@@ -137,6 +141,59 @@ function bindSparkles() {
   );
 }
 
+
+// ====== 背景音乐（PRESS PLAY 解锁 + 右上角随时切换） ======
+let audio, musicToggle;
+
+function setMusicState(playing) {
+  if (!musicToggle) return;
+  musicToggle.classList.toggle("is-on", playing);
+  musicToggle.classList.toggle("is-off", !playing);
+  musicToggle.setAttribute("aria-pressed", playing ? "true" : "false");
+  const state = musicToggle.querySelector(".mt-state");
+  if (state) state.textContent = playing ? "ON" : "OFF";
+}
+
+function armMusic() {
+  if (!audio || !audio.paused) return;
+  // 必须在 click handler 同步路径里调，iOS 才放行
+  const p = audio.play();
+  if (p && typeof p.then === "function") {
+    p.then(() => setMusicState(true)).catch((err) => {
+      // eslint-disable-next-line no-console
+      console.warn("[bgm] play blocked:", err && err.message);
+    });
+  } else {
+    setMusicState(true);
+  }
+}
+
+function bindMusic() {
+  audio = $("#bgm");
+  musicToggle = $("#musicToggle");
+  if (!audio || !musicToggle) return;
+
+  audio.volume = 0.65;
+
+  musicToggle.addEventListener("click", () => {
+    if (audio.paused) {
+      const p = audio.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => setMusicState(true)).catch(() => setMusicState(false));
+      } else {
+        setMusicState(true);
+      }
+    } else {
+      audio.pause();
+      setMusicState(false);
+    }
+  });
+
+  // 同步事件（比如标签页切走再回来 / 浏览器自动暂停）
+  audio.addEventListener("play", () => setMusicState(true));
+  audio.addEventListener("pause", () => setMusicState(false));
+}
+
 async function init() {
   try {
     await window.NB.buildChapters();
@@ -160,6 +217,7 @@ async function init() {
   scenes = [...$$(".scene")];
   renderPagerDots(scenes.length);
   bindNavigation();
+  bindMusic();
   bindSparkles();
   updatePager();
 }

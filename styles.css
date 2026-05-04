@@ -1286,6 +1286,80 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .polaroid:hover { transform: rotate(var(--rot, 0deg)); }
 }
 
+/* ============================================================
+   背景音乐开关（右上角浮岛）
+   ============================================================ */
+.music-toggle {
+  position: fixed;
+  top: clamp(10px, 1.6vh, 18px);
+  right: clamp(10px, 1.6vw, 22px);
+  z-index: 200;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 14px 6px 8px;
+  background: rgba(255, 255, 255, .82);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  box-shadow: 3px 4px 0 var(--ink);
+  font-family: var(--f-display);
+  font-size: clamp(12px, 1.2vw, 14px);
+  letter-spacing: .12em;
+  color: var(--ink);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+  transition: transform .15s ease, box-shadow .15s ease;
+}
+.music-toggle:hover {
+  transform: translateY(-2px);
+  box-shadow: 4px 5px 0 var(--ink);
+}
+.music-toggle:active {
+  transform: translateY(1px);
+  box-shadow: 1px 2px 0 var(--ink);
+}
+
+.mt-disc {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 50% 50%, #fff 0 18%, transparent 18%),
+    conic-gradient(from 0deg, #ff2e9f, #9d4eff, #00e5ff, #ffe45e, #ff2e9f);
+  border: 1.5px solid var(--ink);
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  color: transparent;
+  flex-shrink: 0;
+}
+.music-toggle.is-on .mt-disc {
+  animation: spin-cd 2.4s linear infinite;
+}
+.music-toggle.is-off .mt-disc {
+  filter: grayscale(.85) brightness(.92);
+}
+
+.mt-label {
+  font-weight: 700;
+  white-space: nowrap;
+}
+.mt-state {
+  font-style: normal;
+  margin-left: 4px;
+  color: var(--neon-pink);
+}
+.music-toggle.is-off .mt-state {
+  color: var(--silver-3);
+}
+
+/* 手机上压缩为只剩 disc + 状态点 */
+@media (max-width: 540px) {
+  .music-toggle { padding: 5px 10px 5px 6px; }
+  .mt-label { display: none; }
+}
+
+
 /* 章节页可能很长（10+ 张照片），把装饰纸层和 washi 限定在顶部区域 */
 .chapter .paper-lined-tl {
   top: clamp(20px, 3vh, 60px);

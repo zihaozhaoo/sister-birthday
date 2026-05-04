@@ -16,6 +16,15 @@
 
 <body>
 
+<!-- 背景音乐：iOS 必须在用户首次手势中触发 .play()；PRESS PLAY 按钮承担解锁 -->
+<audio id="bgm" src="public/audio/Turns.mp3" preload="auto" loop aria-hidden="true"></audio>
+
+<!-- 右上角音乐开关（部署后可随时静音 / 复播） -->
+<button id="musicToggle" class="music-toggle is-off" type="button" aria-label="切换背景音乐" aria-pressed="false">
+  <span class="mt-disc" aria-hidden="true">♪</span>
+  <span class="mt-label">MUSIC <em class="mt-state">OFF</em></span>
+</button>
+
 <!-- ============== 1. 开场幕：黑底舞台 + 聚光灯 + PRESS PLAY ============== -->
 <section id="curtain" class="scene curtain">
   <div class="spotlight" aria-hidden="true"></div>
@@ -51,7 +60,7 @@
       <span class="gel-label">▶ PRESS&nbsp;PLAY</span>
     </button>
 
-    <p class="hint">音乐尚未上传 · 视觉先开 · 后续接入 mp3</p>
+    <p class="hint">点 PRESS PLAY · 音乐起 · 进入诺宝频道</p>
   </div>
 
   <!-- "点这里 ♡" 手写注释 + 弯弯箭头从右上指向 PRESS PLAY -->
