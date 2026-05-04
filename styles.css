@@ -1133,4 +1133,176 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .pager-label { display: none; }
   .pager-btn { padding: 10px 14px; font-size: 18px; }
   .pager { padding: 5px 8px; gap: 8px; }
+  .pager-dots { gap: 4px; }
+  .dot { width: 8px; height: 8px; }
+  .dot.active { width: 18px; }
 }
+
+
+/* ============================================================
+   4. CHAPTER — 时间线章节（按"年·季"分页，由 chapters.js 注入）
+   与 .timeline 共享 .paper-lined-tl / .paper-pink-tl / .washi-tl-* 等
+   ============================================================ */
+.chapter {
+  /* 章节默认底色：粉 → 紫 → 黄渐变（与 .timeline 一致） */
+  background: linear-gradient(180deg, #ffd6ec 0%, #d8c8ff 55%, #ffe45e 100%);
+  padding-top: clamp(40px, 8vh, 96px);
+  padding-left: clamp(20px, 5vw, 64px);
+  padding-right: clamp(20px, 5vw, 64px);
+}
+
+/* 章节背景变体（按 data-variant 循环换色，避免每章一模一样） */
+.chapter[data-variant="1"] {
+  background: linear-gradient(180deg, #fff4dc 0%, #ffd6ec 50%, #d8c8ff 100%);
+}
+.chapter[data-variant="2"] {
+  background: linear-gradient(180deg, #d8f5e7 0%, #ffd6ec 50%, #fff4dc 100%);
+}
+.chapter[data-variant="3"] {
+  background: linear-gradient(180deg, #e8d8ff 0%, #ffd6ec 50%, #b8ffd9 100%);
+}
+
+/* 章节正文容器（让照片墙居中，避免在 1080p 上糊到边） */
+.chapter-body {
+  position: relative;
+  z-index: 6;
+  max-width: 1280px;
+  margin: clamp(20px, 4vh, 48px) auto 0;
+  padding: 0 clamp(4px, 1.5vw, 20px);
+}
+
+/* 照片墙：响应式三段（1 / 2 / 3 列） */
+.photo-wall {
+  display: grid;
+  gap: clamp(22px, 3.5vw, 44px);
+  grid-template-columns: 1fr;
+  align-items: start;
+}
+@media (min-width: 600px) {
+  .photo-wall { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 1100px) {
+  .photo-wall { grid-template-columns: repeat(3, 1fr); }
+}
+
+/* 拍立得 */
+.polaroid {
+  position: relative;
+  background: #fffaf2;
+  padding: 12px 12px 36px;
+  border: 1.5px solid rgba(26, 0, 40, .25);
+  box-shadow: 6px 8px 0 rgba(26, 0, 40, .22);
+  transform: rotate(var(--rot, 0deg));
+  transition: transform .35s cubic-bezier(.2,.8,.3,1.2),
+              box-shadow .35s ease,
+              z-index 0s .35s;
+}
+.polaroid:hover {
+  transform: rotate(0) scale(1.06);
+  box-shadow: 10px 12px 0 rgba(26, 0, 40, .28);
+  z-index: 12;
+  transition-delay: 0s;
+}
+
+.polaroid picture,
+.polaroid img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: rgba(26, 0, 40, .06);
+}
+
+.polaroid figcaption {
+  margin-top: 12px;
+  text-align: center;
+  font-family: var(--f-hand);
+  font-weight: 700;
+  font-size: clamp(20px, 2.2vw, 26px);
+  color: var(--ink);
+  letter-spacing: .04em;
+}
+
+/* 拍立得顶部胶带（每 3 张随机出一条） */
+.polaroid .tape-corner {
+  position: absolute;
+  top: -10px;
+  width: clamp(48px, 8vw, 72px);
+  height: 18px;
+  background: var(--tape, rgba(255, 138, 209, .7));
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0) 0,
+    rgba(255, 255, 255, 0) 4px,
+    rgba(255, 255, 255, .35) 4px,
+    rgba(255, 255, 255, .35) 8px
+  );
+  border: 1px solid rgba(26, 0, 40, .25);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8px, #000 calc(100% - 8px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 8px, #000 calc(100% - 8px), transparent 100%);
+  z-index: 2;
+}
+.polaroid .tape-corner.tl { left: 14%; transform: rotate(-6deg); }
+.polaroid .tape-corner.tr {
+  right: 14%;
+  transform: rotate(7deg);
+  --tape: rgba(255, 228, 94, .85);
+}
+
+/* 中点小字号（年与季节之间的"·"） */
+.ransom-ch .rl-dot {
+  font-size: clamp(28px, 5vw, 60px);
+  padding: 4px 6px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  color: var(--ink) !important;
+}
+
+/* 章末手写小尾巴 */
+.ch-tail {
+  position: relative;
+  z-index: 5;
+  text-align: center;
+  margin: clamp(28px, 5vh, 56px) auto 0;
+  font-size: clamp(20px, 2.2vw, 26px);
+  color: #6f2dc4;
+  font-weight: 700;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+/* 章节里"散落小贴纸"位置不要写死复用 .tag-tl-1/2，避免与 cover 时的 .timeline 互相影响 */
+.chapter .tag-tl-1,
+.chapter .tag-tl-2 { display: none; }
+
+/* 触屏 / 减少动画偏好：去掉 polaroid 悬浮位移，避免 iOS 上 jitter */
+@media (hover: none) {
+  .polaroid:hover {
+    transform: rotate(var(--rot, 0deg));
+    box-shadow: 6px 8px 0 rgba(26, 0, 40, .22);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .polaroid { transition: none; }
+  .polaroid:hover { transform: rotate(var(--rot, 0deg)); }
+}
+
+/* 章节页可能很长（10+ 张照片），把装饰纸层和 washi 限定在顶部区域 */
+.chapter .paper-lined-tl {
+  top: clamp(20px, 3vh, 60px);
+  height: clamp(220px, 36vh, 360px);
+  width: clamp(160px, 24%, 320px);
+}
+.chapter .paper-pink-tl {
+  top: clamp(40px, 6vh, 100px);
+  height: clamp(260px, 42vh, 420px);
+  width: clamp(220px, 36%, 480px);
+}
+.chapter .paper-mint-tl {
+  bottom: auto;
+  top: clamp(280px, 48vh, 480px);
+  height: clamp(140px, 22vh, 240px);
+  width: clamp(140px, 20%, 260px);
+  left: 6%;
+}
+.chapter .washi-tl-1,
+.chapter .washi-tl-2 { top: clamp(8px, 1.2vh, 20px); }

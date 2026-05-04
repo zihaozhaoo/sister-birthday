@@ -210,83 +210,8 @@
 </section>
 
 
-<!-- ============== 3. 时间线（雏形 · 等图片优化后填充真实数据） ============== -->
-<section id="timeline" class="scene timeline hidden">
-  <div class="holo-bg" aria-hidden="true"></div>
-  <div class="grid-bg" aria-hidden="true"></div>
-
-  <!-- 撕纸大块（与 cover 不同位置，避免重复感） -->
-  <div class="paper paper-lined paper-lined-tl" aria-hidden="true"></div>
-  <div class="paper paper-pink paper-pink-tl" aria-hidden="true"></div>
-  <div class="paper paper-mint paper-mint-tl" aria-hidden="true"></div>
-
-  <!-- washi tape -->
-  <span class="washi washi-tl-1" aria-hidden="true"></span>
-  <span class="washi washi-tl-2" aria-hidden="true"></span>
-
-  <header class="ch-head">
-    <!-- "CH.01" 复古印章 -->
-    <span class="stamp stamp-ch">CH·01</span>
-
-    <!-- "2020 · 春" 剪报字母（数字+中文混合） -->
-    <h3 class="ransom ransom-ch" aria-label="2020 春">
-      <span class="rl-row">
-        <span class="rl small" style="--bg:#ffffff;--c:#1a0028;--rot:-4deg;--font:'Bowlby One',sans-serif">2</span>
-        <span class="rl small" style="--bg:#ffe45e;--c:#c41a78;--rot:5deg;--font:Anton,sans-serif">0</span>
-        <span class="rl small" style="--bg:#ffb3da;--c:#1a2c8c;--rot:-3deg;--font:'Permanent Marker',cursive">2</span>
-        <span class="rl small" style="--bg:#c8e8ff;--c:#1d6b3a;--rot:4deg;--font:Bungee,sans-serif">0</span>
-        <span class="rl cn" style="--bg:#ff8ad1;--c:#1a0028;--rot:-3deg;--font:'ZCOOL KuaiLe',cursive">春</span>
-      </span>
-    </h3>
-
-    <p class="caveat ch-sub">最早的回忆 · 4 月 ✿</p>
-  </header>
-
-  <!-- 散落的手画涂鸦 -->
-  <svg class="doodle flower flower-tl-1" viewBox="0 0 60 60" aria-hidden="true">
-    <g fill="#ff8ad1" stroke="#1a0028" stroke-width="2">
-      <circle cx="30" cy="14" r="8"/><circle cx="46" cy="30" r="8"/>
-      <circle cx="30" cy="46" r="8"/><circle cx="14" cy="30" r="8"/>
-    </g>
-    <circle cx="30" cy="30" r="6" fill="#ffe45e" stroke="#1a0028" stroke-width="2"/>
-  </svg>
-  <svg class="doodle flower flower-tl-2" viewBox="0 0 60 60" aria-hidden="true">
-    <g fill="#b8ffd9" stroke="#1a0028" stroke-width="2">
-      <circle cx="30" cy="14" r="8"/><circle cx="46" cy="30" r="8"/>
-      <circle cx="30" cy="46" r="8"/><circle cx="14" cy="30" r="8"/>
-    </g>
-    <circle cx="30" cy="30" r="6" fill="#ff8ad1" stroke="#1a0028" stroke-width="2"/>
-  </svg>
-
-  <!-- 黑色简笔星形贴纸（jpan 90s 杂志感） -->
-  <svg class="doodle star-stamp star-tl-1" viewBox="0 0 80 80" aria-hidden="true">
-    <path d="M40 8 L48 30 L72 32 L54 48 L60 72 L40 58 L20 72 L26 48 L8 32 L32 30 Z"
-      fill="#1a0028" stroke="#1a0028" stroke-width="3" stroke-linejoin="round"/>
-  </svg>
-
-  <!-- "COMING SOON" 双线橡皮章 -->
-  <span class="stamp stamp-soon">★ COMING SOON ★</span>
-
-  <!-- 主内容卡片：米色便签 + 顶部胶带 -->
-  <div class="memo-card">
-    <span class="memo-tape" aria-hidden="true"></span>
-    <h4 class="memo-title">📸 时间线骨架就位</h4>
-    <p>下一步：跑图片优化脚本 → 把 345 张原图转成 web 版本，填充进这里。</p>
-    <p class="memo-hint">每一章会用拼贴拍立得 + 涂鸦贴纸 + 霓虹边框区分舞蹈视频 ♡</p>
-  </div>
-
-  <!-- 散落贴纸 -->
-  <p class="caveat tag tag-tl-1">小回忆 ✿</p>
-  <p class="caveat tag tag-tl-2">to be cont'd ↓</p>
-
-  <!-- floating emojis -->
-  <div class="floaters" aria-hidden="true">
-    <span class="f f-heart" style="--x:6%; --y:60%;--d:0s; --s:.85">💖</span>
-    <span class="f f-star"  style="--x:92%;--y:48%;--d:.8s;--s:.7">✨</span>
-    <span class="f f-bow"   style="--x:14%;--y:84%;--d:1.6s;--s:.85">🎀</span>
-    <span class="f f-heart" style="--x:88%;--y:80%;--d:2.4s;--s:.75">💕</span>
-  </div>
-</section>
+<!-- ============== 3. 时间线章节（由 chapters.js 按年·季注入） ============== -->
+<div id="chapters-mount"></div>
 
 <!-- ============== 翻页导航（固定在屏幕底部） ============== -->
 <nav class="pager" aria-label="页面导航">
@@ -294,17 +219,14 @@
     <span class="pager-icon">◀</span>
     <span class="pager-label">上一页</span>
   </button>
-  <ol class="pager-dots" aria-hidden="true">
-    <li class="dot active"></li>
-    <li class="dot"></li>
-    <li class="dot"></li>
-  </ol>
+  <ol class="pager-dots" aria-hidden="true"></ol>
   <button id="nextBtn" class="pager-btn pager-next" type="button" aria-label="下一页">
     <span class="pager-label">下一页</span>
     <span class="pager-icon">▶</span>
   </button>
 </nav>
 
+<script src="chapters.js" defer></script>
 <script src="main.js" defer></script>
 </body>
 </html>
