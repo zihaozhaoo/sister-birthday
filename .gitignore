@@ -7,3 +7,6 @@ node_modules/
 
 # Original full-size photos (1.8 GB). Web-optimized copies live in public/photos/.
 photos-source/
+
+# Sample comparison output for evaluating compression quality
+data/comparison/
