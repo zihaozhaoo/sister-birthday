@@ -1,9 +1,10 @@
 {
-  "generatedAt": "2026-05-04T05:09:46.730Z",
+  "generatedAt": "2026-05-11T07:41:04.187Z",
   "sourceDir": "photos-source",
-  "count": 345,
+  "count": 403,
   "sourceTally": {
-    "filename": 345
+    "filename": 393,
+    "birthtime": 10
   },
   "photos": [
     {
@@ -22,7 +23,9 @@
       "bytes": 3880216,
       "takenAt": "2020-04-06T14:01:20",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20200412_114652.jpg",
@@ -110,7 +113,9 @@
       "bytes": 3324234,
       "takenAt": "2020-05-21T19:21:48",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3840,
+      "height": 5120
     },
     {
       "file": "IMG_20200521_192701.jpg",
@@ -128,7 +133,9 @@
       "bytes": 3093359,
       "takenAt": "2020-05-21T19:31:07",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3840,
+      "height": 5120
     },
     {
       "file": "IMG_20200608_193658.jpg",
@@ -180,7 +187,9 @@
       "bytes": 3130606,
       "takenAt": "2020-06-13T20:08:06",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 4608,
+      "height": 3456
     },
     {
       "file": "IMG_20200613_200809.jpg",
@@ -196,7 +205,9 @@
       "bytes": 3189079,
       "takenAt": "2020-06-13T20:08:24",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 4608,
+      "height": 3456
     },
     {
       "file": "IMG_20200613_200854.jpg",
@@ -236,7 +247,9 @@
       "bytes": 2689586,
       "takenAt": "2020-06-13T20:12:48",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 4608,
+      "height": 3456
     },
     {
       "file": "IMG_20200613_201254.jpg",
@@ -300,7 +313,9 @@
       "bytes": 3532493,
       "takenAt": "2020-06-13T20:18:28",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20200613_202023.jpg",
@@ -318,7 +333,9 @@
       "bytes": 3589456,
       "takenAt": "2020-06-13T20:20:29",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20200616_223129.jpg",
@@ -326,7 +343,9 @@
       "bytes": 3375363,
       "takenAt": "2020-06-16T22:31:29",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20200617_095044_comp.jpg",
@@ -350,7 +369,9 @@
       "bytes": 6394743,
       "takenAt": "2020-06-25T19:24:04",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20200625_192409.jpg",
@@ -398,7 +419,9 @@
       "bytes": 2898362,
       "takenAt": "2020-07-12T18:33:52",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 2896,
+      "height": 10976
     },
     {
       "file": "IMG_20200716_202321.jpg",
@@ -406,7 +429,9 @@
       "bytes": 3902622,
       "takenAt": "2020-07-16T20:23:21",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20200716_202324.jpg",
@@ -414,7 +439,9 @@
       "bytes": 3823558,
       "takenAt": "2020-07-16T20:23:24",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20200716_202340.jpg",
@@ -422,7 +449,9 @@
       "bytes": 3965950,
       "takenAt": "2020-07-16T20:23:40",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20200716_202406.jpg",
@@ -450,7 +479,8 @@
       "bytes": 978631,
       "takenAt": "2020-07-17T13:48:00",
       "source": "filename",
-      "selected": false
+      "selected": false,
+      "broken": true
     },
     {
       "file": "IMG_20200718_123739.jpg",
@@ -588,7 +618,9 @@
       "bytes": 5818448,
       "takenAt": "2020-08-31T13:18:22",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 4608,
+      "height": 3456
     },
     {
       "file": "IMG_20200831_131830.jpg",
@@ -604,7 +636,9 @@
       "bytes": 6027105,
       "takenAt": "2020-08-31T13:19:03",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20200831_133538.jpg",
@@ -630,7 +664,9 @@
       "bytes": 6396424,
       "takenAt": "2020-08-31T14:00:31",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 4608,
+      "height": 3456
     },
     {
       "file": "IMG_20200831_140037.jpg",
@@ -682,7 +718,9 @@
       "bytes": 7801833,
       "takenAt": "2020-08-31T14:10:57",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20200831_143051.jpg",
@@ -698,7 +736,9 @@
       "bytes": 6566935,
       "takenAt": "2020-08-31T14:31:02",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20200831_143118.jpg",
@@ -724,7 +764,9 @@
       "bytes": 6865264,
       "takenAt": "2020-08-31T14:32:17",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 4608,
+      "height": 3456
     },
     {
       "file": "IMG_20200831_143258.jpg",
@@ -750,7 +792,9 @@
       "bytes": 5699377,
       "takenAt": "2020-08-31T14:52:07",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20200831_145215.jpg",
@@ -796,7 +840,9 @@
       "bytes": 1145432,
       "takenAt": "2020-09-29T19:35:42",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 1080,
+      "height": 1440
     },
     {
       "file": "faceu_6844774361866441223_20200929193620287.jpg",
@@ -824,7 +870,9 @@
       "bytes": 1121216,
       "takenAt": "2020-09-29T19:37:11",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 1080,
+      "height": 1440
     },
     {
       "file": "faceu_6844794079260185101_20200929193814608.jpg",
@@ -832,7 +880,9 @@
       "bytes": 1106761,
       "takenAt": "2020-09-29T19:38:14",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 1080,
+      "height": 1440
     },
     {
       "file": "IMG_20201004_134357_Burst06.jpg",
@@ -858,7 +908,9 @@
       "bytes": 4111242,
       "takenAt": "2020-10-04T19:04:17",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20201004_194243.jpg",
@@ -866,7 +918,9 @@
       "bytes": 4686843,
       "takenAt": "2020-10-04T19:42:43",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20201004_194533.jpg",
@@ -902,7 +956,9 @@
       "bytes": 4674818,
       "takenAt": "2020-10-04T19:48:59",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20201006_081610.jpg",
@@ -910,7 +966,9 @@
       "bytes": 3446064,
       "takenAt": "2020-10-06T08:16:10",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 4608,
+      "height": 3456
     },
     {
       "file": "IMG_20201006_081623.jpg",
@@ -926,7 +984,9 @@
       "bytes": 4181061,
       "takenAt": "2020-10-06T08:50:07",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20201006_085019.jpg",
@@ -954,7 +1014,9 @@
       "bytes": 4541645,
       "takenAt": "2020-10-06T08:51:57",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20201006_085517.jpg",
@@ -962,7 +1024,9 @@
       "bytes": 3807952,
       "takenAt": "2020-10-06T08:55:17",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 4608,
+      "height": 3456
     },
     {
       "file": "faceu_6876055661034082829_20201011160952313.jpg",
@@ -1006,7 +1070,9 @@
       "bytes": 4633749,
       "takenAt": "2021-02-12T17:02:14",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210212_170216.jpg",
@@ -1014,7 +1080,9 @@
       "bytes": 4503881,
       "takenAt": "2021-02-12T17:02:16",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210212_170254.jpg",
@@ -1038,7 +1106,9 @@
       "bytes": 4290644,
       "takenAt": "2021-02-12T17:04:42",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 4608,
+      "height": 3456
     },
     {
       "file": "IMG_20210212_170628.jpg",
@@ -1088,7 +1158,9 @@
       "bytes": 3497155,
       "takenAt": "2021-02-26T14:23:35",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210226_142855.jpg",
@@ -1096,7 +1168,9 @@
       "bytes": 4366125,
       "takenAt": "2021-02-26T14:28:55",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210226_144927.jpg",
@@ -1154,7 +1228,9 @@
       "bytes": 4331252,
       "takenAt": "2021-02-26T16:30:00",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210226_163005_Burst01.jpg",
@@ -1196,7 +1272,9 @@
       "bytes": 3694830,
       "takenAt": "2021-02-27T16:38:15",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210427_073021.jpg",
@@ -1204,7 +1282,9 @@
       "bytes": 7613461,
       "takenAt": "2021-04-27T07:30:21",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210427_073022.jpg",
@@ -1238,7 +1318,9 @@
       "bytes": 8104985,
       "takenAt": "2021-04-27T07:30:44",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210427_073045.jpg",
@@ -1266,7 +1348,9 @@
       "bytes": 4140394,
       "takenAt": "2021-04-27T14:58:55",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 4608,
+      "height": 3456
     },
     {
       "file": "IMG_20210427_145902.jpg",
@@ -1274,7 +1358,9 @@
       "bytes": 4372469,
       "takenAt": "2021-04-27T14:59:02",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210430_102703.jpg",
@@ -1414,7 +1500,9 @@
       "bytes": 8648077,
       "takenAt": "2021-05-04T11:26:24",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210504_112635.jpg",
@@ -1582,7 +1670,9 @@
       "bytes": 7034285,
       "takenAt": "2021-05-04T11:44:27",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210504_114438.jpg",
@@ -1606,7 +1696,9 @@
       "bytes": 7395805,
       "takenAt": "2021-05-04T11:45:23",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210504_114527.jpg",
@@ -1614,7 +1706,9 @@
       "bytes": 7533008,
       "takenAt": "2021-05-04T11:45:27",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210504_114533.jpg",
@@ -1706,7 +1800,9 @@
       "bytes": 7860847,
       "takenAt": "2021-05-04T12:05:44",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210504_120935.jpg",
@@ -1748,7 +1844,9 @@
       "bytes": 8436259,
       "takenAt": "2021-05-04T13:12:58",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210504_131307.jpg",
@@ -1792,7 +1890,9 @@
       "bytes": 7886473,
       "takenAt": "2021-05-04T14:00:21",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210504_140043.jpg",
@@ -2208,7 +2308,9 @@
       "bytes": 5377861,
       "takenAt": "2021-07-08T21:12:03",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 4608,
+      "height": 3456
     },
     {
       "file": "IMG_20210708_211211.jpg",
@@ -2336,7 +2438,9 @@
       "bytes": 5591158,
       "takenAt": "2021-07-11T15:55:16",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "video_20210711_155523.mp4",
@@ -2434,7 +2538,9 @@
       "bytes": 6414863,
       "takenAt": "2021-07-11T16:09:29",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210711_160934.jpg",
@@ -2494,7 +2600,9 @@
       "bytes": 6032941,
       "takenAt": "2021-07-11T16:26:08",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210711_162609.jpg",
@@ -2502,7 +2610,9 @@
       "bytes": 6568577,
       "takenAt": "2021-07-11T16:26:09",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210711_162611.jpg",
@@ -2518,7 +2628,9 @@
       "bytes": 6998202,
       "takenAt": "2021-07-11T16:26:15",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 3456,
+      "height": 4608
     },
     {
       "file": "IMG_20210711_162617.jpg",
@@ -2626,7 +2738,9 @@
       "bytes": 6410772,
       "takenAt": "2021-07-11T16:53:15",
       "source": "filename",
-      "selected": false
+      "selected": true,
+      "width": 4608,
+      "height": 3456
     },
     {
       "file": "IMG_20210711_165549.jpg",
@@ -2875,19 +2989,583 @@
       "takenAt": "2021-07-23T21:48:38",
       "source": "filename",
       "selected": true
+    },
+    {
+      "file": "77831777704682_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 767378,
+      "takenAt": "2026-05-02T14:51:22",
+      "source": "filename",
+      "selected": true,
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "file": "77841777704685_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 508170,
+      "takenAt": "2026-05-02T14:51:25",
+      "source": "filename",
+      "selected": true,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "file": "77851777704688_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 120490,
+      "takenAt": "2026-05-02T14:51:28",
+      "source": "filename",
+      "selected": false
+    },
+    {
+      "file": "77861777704689_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 286547,
+      "takenAt": "2026-05-02T14:51:29",
+      "source": "filename",
+      "selected": true,
+      "width": 1280,
+      "height": 1707
+    },
+    {
+      "file": "77871777704690_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 664099,
+      "takenAt": "2026-05-02T14:51:30",
+      "source": "filename",
+      "selected": true,
+      "width": 1080,
+      "height": 1440
+    },
+    {
+      "file": "77881777704691_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 250927,
+      "takenAt": "2026-05-02T14:51:31",
+      "source": "filename",
+      "selected": true,
+      "width": 1280,
+      "height": 1280
+    },
+    {
+      "file": "77891777704692_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 335171,
+      "takenAt": "2026-05-02T14:51:32",
+      "source": "filename",
+      "selected": true,
+      "width": 1280,
+      "height": 1280
+    },
+    {
+      "file": "77901777704701_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 197504,
+      "takenAt": "2026-05-02T14:51:41",
+      "source": "filename",
+      "selected": true,
+      "width": 1280,
+      "height": 1280
+    },
+    {
+      "file": "77911777704708_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 321372,
+      "takenAt": "2026-05-02T14:51:48",
+      "source": "filename",
+      "selected": true,
+      "width": 1280,
+      "height": 1280
+    },
+    {
+      "file": "77931777704714_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 244588,
+      "takenAt": "2026-05-02T14:51:54",
+      "source": "filename",
+      "selected": true,
+      "width": 1276,
+      "height": 1702
+    },
+    {
+      "file": "77941777704719_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 4968862,
+      "takenAt": "2026-05-02T14:51:59",
+      "source": "filename",
+      "selected": true,
+      "width": 3024,
+      "height": 4032
+    },
+    {
+      "file": "77951777704722_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 5055502,
+      "takenAt": "2026-05-02T14:52:02",
+      "source": "filename",
+      "selected": true,
+      "width": 3000,
+      "height": 4000
+    },
+    {
+      "file": "77961777704727_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 4947975,
+      "takenAt": "2026-05-02T14:52:07",
+      "source": "filename",
+      "selected": true,
+      "width": 3000,
+      "height": 4000
+    },
+    {
+      "file": "77971777704728_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 519588,
+      "takenAt": "2026-05-02T14:52:08",
+      "source": "filename",
+      "selected": true,
+      "width": 1280,
+      "height": 1706
+    },
+    {
+      "file": "77981777704730_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 537703,
+      "takenAt": "2026-05-02T14:52:10",
+      "source": "filename",
+      "selected": true,
+      "width": 1706,
+      "height": 1280
+    },
+    {
+      "file": "77991777704731_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 528132,
+      "takenAt": "2026-05-02T14:52:11",
+      "source": "filename",
+      "selected": true,
+      "width": 1706,
+      "height": 1280
+    },
+    {
+      "file": "78001777704732_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 259407,
+      "takenAt": "2026-05-02T14:52:12",
+      "source": "filename",
+      "selected": true,
+      "width": 1276,
+      "height": 1702
+    },
+    {
+      "file": "78011777704734_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 135669,
+      "takenAt": "2026-05-02T14:52:14",
+      "source": "filename",
+      "selected": false
+    },
+    {
+      "file": "78021777704736_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 247001,
+      "takenAt": "2026-05-02T14:52:16",
+      "source": "filename",
+      "selected": true,
+      "width": 1280,
+      "height": 1280
+    },
+    {
+      "file": "78031777704738_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 1103895,
+      "takenAt": "2026-05-02T14:52:18",
+      "source": "filename",
+      "selected": true,
+      "width": 1936,
+      "height": 2592
+    },
+    {
+      "file": "78041777704739_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 259334,
+      "takenAt": "2026-05-02T14:52:19",
+      "source": "filename",
+      "selected": true,
+      "width": 1280,
+      "height": 1280
+    },
+    {
+      "file": "78051777704740_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 156050,
+      "takenAt": "2026-05-02T14:52:20",
+      "source": "filename",
+      "selected": true,
+      "width": 1926,
+      "height": 1280
+    },
+    {
+      "file": "78061777704741_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 1107206,
+      "takenAt": "2026-05-02T14:52:21",
+      "source": "filename",
+      "selected": true,
+      "width": 2592,
+      "height": 1936
+    },
+    {
+      "file": "78091777704745_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 329984,
+      "takenAt": "2026-05-02T14:52:25",
+      "source": "filename",
+      "selected": true,
+      "width": 1279,
+      "height": 1706
+    },
+    {
+      "file": "78101777704746_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 218342,
+      "takenAt": "2026-05-02T14:52:26",
+      "source": "filename",
+      "selected": true,
+      "width": 1800,
+      "height": 1080
+    },
+    {
+      "file": "78111777704752_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 6104626,
+      "takenAt": "2026-05-02T14:52:32",
+      "source": "filename",
+      "selected": true,
+      "width": 3968,
+      "height": 2976
+    },
+    {
+      "file": "78121777704757_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 5992664,
+      "takenAt": "2026-05-02T14:52:37",
+      "source": "filename",
+      "selected": true,
+      "width": 3968,
+      "height": 2976
+    },
+    {
+      "file": "78131777704758_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 40678,
+      "takenAt": "2026-05-02T14:52:38",
+      "source": "filename",
+      "selected": false
+    },
+    {
+      "file": "78151777704760_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 40206,
+      "takenAt": "2026-05-02T14:52:40",
+      "source": "filename",
+      "selected": false
+    },
+    {
+      "file": "78161777704761_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 38043,
+      "takenAt": "2026-05-02T14:52:41",
+      "source": "filename",
+      "selected": false
+    },
+    {
+      "file": "78171777704762_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 209453,
+      "takenAt": "2026-05-02T14:52:42",
+      "source": "filename",
+      "selected": true,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "file": "78191777704764_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 134669,
+      "takenAt": "2026-05-02T14:52:44",
+      "source": "filename",
+      "selected": false
+    },
+    {
+      "file": "78201777704765_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 175102,
+      "takenAt": "2026-05-02T14:52:45",
+      "source": "filename",
+      "selected": true,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "file": "78211777704766_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 105611,
+      "takenAt": "2026-05-02T14:52:46",
+      "source": "filename",
+      "selected": false
+    },
+    {
+      "file": "78221777704768_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 114232,
+      "takenAt": "2026-05-02T14:52:48",
+      "source": "filename",
+      "selected": true,
+      "width": 1080,
+      "height": 1440
+    },
+    {
+      "file": "78231777704770_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 345089,
+      "takenAt": "2026-05-02T14:52:50",
+      "source": "filename",
+      "selected": true,
+      "width": 750,
+      "height": 563
+    },
+    {
+      "file": "78241777704771_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 106562,
+      "takenAt": "2026-05-02T14:52:51",
+      "source": "filename",
+      "selected": false
+    },
+    {
+      "file": "78251777704773_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 173843,
+      "takenAt": "2026-05-02T14:52:53",
+      "source": "filename",
+      "selected": true,
+      "width": 1440,
+      "height": 1080
+    },
+    {
+      "file": "78261777704774_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 608567,
+      "takenAt": "2026-05-02T14:52:54",
+      "source": "filename",
+      "selected": true,
+      "width": 750,
+      "height": 1000
+    },
+    {
+      "file": "78271777704776_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 309782,
+      "takenAt": "2026-05-02T14:52:56",
+      "source": "filename",
+      "selected": true,
+      "width": 960,
+      "height": 1920
+    },
+    {
+      "file": "78281777704778_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 321537,
+      "takenAt": "2026-05-02T14:52:58",
+      "source": "filename",
+      "selected": true,
+      "width": 960,
+      "height": 1920
+    },
+    {
+      "file": "78291777704779_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 187454,
+      "takenAt": "2026-05-02T14:52:59",
+      "source": "filename",
+      "selected": true,
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "file": "78341777704796_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 6408412,
+      "takenAt": "2026-05-02T14:53:16",
+      "source": "filename",
+      "selected": true,
+      "width": 4032,
+      "height": 3024
+    },
+    {
+      "file": "78391777704818_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 10863310,
+      "takenAt": "2026-05-02T14:53:38",
+      "source": "filename",
+      "selected": true,
+      "width": 5712,
+      "height": 4284
+    },
+    {
+      "file": "78401777704819_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 164003,
+      "takenAt": "2026-05-02T14:53:39",
+      "source": "filename",
+      "selected": true,
+      "width": 720,
+      "height": 1280
+    },
+    {
+      "file": "78431777704827_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 771896,
+      "takenAt": "2026-05-02T14:53:47",
+      "source": "filename",
+      "selected": true,
+      "width": 1280,
+      "height": 2227
+    },
+    {
+      "file": "78441777704829_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 1954204,
+      "takenAt": "2026-05-02T14:53:49",
+      "source": "filename",
+      "selected": true,
+      "width": 1280,
+      "height": 2753
+    },
+    {
+      "file": "78471777704833_.pic_hd.jpg",
+      "kind": "image",
+      "bytes": 771896,
+      "takenAt": "2026-05-02T14:53:53",
+      "source": "filename",
+      "selected": true,
+      "width": 1280,
+      "height": 2227
+    },
+    {
+      "file": "WechatIMG7851.jpg",
+      "kind": "image",
+      "bytes": 611066,
+      "takenAt": "2026-05-02T14:54:09",
+      "source": "birthtime",
+      "selected": true,
+      "width": 1280,
+      "height": 1707
+    },
+    {
+      "file": "WechatIMG7858.jpg",
+      "kind": "image",
+      "bytes": 473536,
+      "takenAt": "2026-05-02T14:54:31",
+      "source": "birthtime",
+      "selected": true,
+      "width": 1280,
+      "height": 1707
+    },
+    {
+      "file": "WechatIMG7873.jpg",
+      "kind": "image",
+      "bytes": 254575,
+      "takenAt": "2026-05-02T14:55:56",
+      "source": "birthtime",
+      "selected": true,
+      "width": 1280,
+      "height": 1707
+    },
+    {
+      "file": "WechatIMG7879.jpg",
+      "kind": "image",
+      "bytes": 493515,
+      "takenAt": "2026-05-02T14:57:26",
+      "source": "birthtime",
+      "selected": true,
+      "width": 1280,
+      "height": 1707
+    },
+    {
+      "file": "WechatIMG7880.jpg",
+      "kind": "image",
+      "bytes": 4111125,
+      "takenAt": "2026-05-02T14:57:33",
+      "source": "birthtime",
+      "selected": true,
+      "width": 2687,
+      "height": 4031
+    },
+    {
+      "file": "WechatIMG7893.jpg",
+      "kind": "image",
+      "bytes": 210147,
+      "takenAt": "2026-05-02T15:04:48",
+      "source": "birthtime",
+      "selected": true,
+      "width": 1280,
+      "height": 1707
+    },
+    {
+      "file": "WechatIMG7855.jpg",
+      "kind": "image",
+      "bytes": 4895253,
+      "takenAt": "2026-05-05T04:09:04",
+      "source": "birthtime",
+      "selected": true,
+      "width": 5712,
+      "height": 4284
+    },
+    {
+      "file": "WechatIMG7945.jpg",
+      "kind": "image",
+      "bytes": 312713,
+      "takenAt": "2026-05-11T15:24:53",
+      "source": "birthtime",
+      "selected": true,
+      "width": 1280,
+      "height": 1707
+    },
+    {
+      "file": "WechatIMG7946.jpg",
+      "kind": "image",
+      "bytes": 297852,
+      "takenAt": "2026-05-11T15:24:53",
+      "source": "birthtime",
+      "selected": true,
+      "width": 1702,
+      "height": 1276
+    },
+    {
+      "file": "WechatIMG7861.jpg",
+      "kind": "image",
+      "bytes": 4465872,
+      "takenAt": "2026-05-11T15:28:36",
+      "source": "birthtime",
+      "selected": true,
+      "width": 4032,
+      "height": 3024
     }
   ],
   "curated": {
     "target": {
-      "perMonth": 5,
-      "maxPerMinute": 2
+      "perMonth": 12,
+      "maxPerMinute": 4
     },
     "keepListSize": 0,
     "dropListSize": 0,
-    "selectedCount": 84
+    "selectedCount": 191
   },
   "optimized": {
-    "generatedAt": "2026-05-04T16:57:31.037Z",
+    "generatedAt": "2026-05-11T07:41:47.282Z",
     "sizes": [
       {
         "tag": "thumb",
@@ -2905,7 +3583,9 @@
         "quality": 88
       }
     ],
-    "processedOk": 55,
-    "broken": []
+    "processedOk": 161,
+    "broken": [
+      "faceu_6828873119722115592_20200717134800590.jpg"
+    ]
   }
 }

@@ -18,8 +18,15 @@ const MANIFEST = path.join(ROOT, "data", "photos.json");
 const KEEP_LIST = path.join(ROOT, "data", "keep.txt");
 const DROP_LIST = path.join(ROOT, "data", "drop.txt");
 
-const PER_MONTH_TARGET = 5;
-const MAX_PER_MINUTE = 2;
+const PER_MONTH_TARGET = 12;
+const MAX_PER_MINUTE = 4;
+// 月份特例：某些月想多保留时单独写。键是 "YYYY-MM"
+const MONTH_TARGET_OVERRIDE = {
+  "2026-05": 50, // 微信新批次（妹妹近期照片，2026 春），整批一起保留
+};
+// 这些月份跳过"同分钟最多 N 张"的去连拍逻辑：
+// 适用于"批量发送/转存"而非真实连拍的情形（一秒内 10 张 != 连拍）
+const MONTH_SKIP_DEDUPE = new Set(Object.keys(MONTH_TARGET_OVERRIDE));
 
 const isFaceu = (file) => /^faceu_/i.test(file);
 const isOriginal = (file) => /^(IMG|DCIM|DSC|P_|MVIMG)_/i.test(file);
@@ -108,8 +115,13 @@ async function main() {
     minuteGroups.get(k).push(p);
   }
   const dedupedImages = [];
-  for (const group of minuteGroups.values()) {
-    dedupedImages.push(...pickFromMinute(group));
+  for (const [mk, group] of minuteGroups.entries()) {
+    const monthOfMinute = mk.slice(0, 7);
+    if (MONTH_SKIP_DEDUPE.has(monthOfMinute)) {
+      dedupedImages.push(...group);
+    } else {
+      dedupedImages.push(...pickFromMinute(group));
+    }
   }
 
   // === 3) 按月份均匀采样 ===
@@ -120,8 +132,9 @@ async function main() {
     monthGroups.get(k).push(p);
   }
   let curatedImages = [];
-  for (const [, group] of [...monthGroups.entries()].sort()) {
-    curatedImages.push(...trimMonthToTarget(group, PER_MONTH_TARGET));
+  for (const [mKey, group] of [...monthGroups.entries()].sort()) {
+    const target = MONTH_TARGET_OVERRIDE[mKey] ?? PER_MONTH_TARGET;
+    curatedImages.push(...trimMonthToTarget(group, target));
   }
 
   // === 4) 用户手动 override ===

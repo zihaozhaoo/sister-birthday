@@ -8,5 +8,8 @@ node_modules/
 # Original full-size photos (1.8 GB). Web-optimized copies live in public/photos/.
 photos-source/
 
+# 临时收图工作目录：照片入库后会被 cp 到 photos-source/，git 不追踪
+data/newpics/
+
 # Sample comparison output for evaluating compression quality
 data/comparison/

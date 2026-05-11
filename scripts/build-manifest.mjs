@@ -18,6 +18,15 @@ const pad = (n) => String(n).padStart(2, "0");
 const dateToLocalIso = (d) =>
   `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}:${pad(d.getSeconds())}`;
 
+// 把任意时间戳按"妹妹所在时区（中国，UTC+8）"格式化。
+// 用于 unix 时间戳类输入（微信文件名、WechatIMG birthtime 等），
+// 让所有照片时间统一按"她那边的本地时间"理解，不受 build 机器时区影响。
+const CST_OFFSET_MS = 8 * 60 * 60 * 1000;
+function dateToCstIso(d) {
+  const shifted = new Date(d.getTime() + CST_OFFSET_MS);
+  return `${shifted.getUTCFullYear()}-${pad(shifted.getUTCMonth() + 1)}-${pad(shifted.getUTCDate())}T${pad(shifted.getUTCHours())}:${pad(shifted.getUTCMinutes())}:${pad(shifted.getUTCSeconds())}`;
+}
+
 // 校验候选时间是否在合理范围（防止文件名里的长 ID 被误识别为日期）
 function isReasonableIso(iso) {
   const m = iso.match(/^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/);
@@ -47,13 +56,21 @@ function parseTimeFromFilename(name) {
     const iso = `${ymd.slice(0, 4)}-${ymd.slice(4, 6)}-${ymd.slice(6, 8)}T${hms.slice(0, 2)}:${hms.slice(2, 4)}:${hms.slice(4, 6)}`;
     if (isReasonableIso(iso)) return iso;
   }
-  // 3) mmexport1597893712345.jpg / WeChat_1597893712.jpeg：unix 毫秒或秒
+  // 3) WeChat HD 导出 <4-digit-seq><10-digit-unix>_.pic_hd.jpg：消息时间戳（秒）
+  //    例：77831777704682_.pic_hd.jpg → seq=7783, unix=1777704682
+  //    必须在通用 unix 模式之前匹配，否则会被吃掉。Unix 时间统一按 CST 显示。
+  const wxHd = name.match(/^\d{4}(\d{10})_\.pic_hd\.(jpe?g|png)$/i);
+  if (wxHd) {
+    const iso = dateToCstIso(new Date(Number(wxHd[1]) * 1000));
+    if (isReasonableIso(iso)) return iso;
+  }
+  // 4) mmexport1597893712345.jpg / WeChat_1597893712.jpeg：unix 毫秒或秒
   const wx = name.match(/(?:mmexport|wechat[_-]?image|wx[_-]?camera)[_-]?(\d{10,13})/i);
   if (wx) {
     const n = wx[1];
     const ms = n.length === 13 ? Number(n) : Number(n) * 1000;
     if (!Number.isNaN(ms)) {
-      const iso = dateToLocalIso(new Date(ms));
+      const iso = dateToCstIso(new Date(ms));
       if (isReasonableIso(iso)) return iso;
     }
   }
@@ -97,7 +114,14 @@ async function classifyOne(absPath) {
     if (exifTime) return { ...base, takenAt: exifTime, source: "exif" };
   }
 
-  return { ...base, takenAt: dateToLocalIso(stat.mtime), source: "mtime" };
+  // 文件系统创建时间（macOS birthtime）优于 mtime：
+  // 微信导出图片擦了 EXIF，文件名又没时间戳时，birthtime 是"保存到本地的瞬间"，
+  // 比 mtime 稳定（mtime 可能被编辑器、缩略图生成等改动）。
+  // 注意：cp 会重置 birthtime，photos-source 里的文件需用 `cp -p` 来源复制。
+  const fsTime = stat.birthtimeMs > 0 ? stat.birthtime : stat.mtime;
+  const source = stat.birthtimeMs > 0 ? "birthtime" : "mtime";
+  // birthtime/mtime 也按 CST 解释，跟 unix 时间戳保持一致
+  return { ...base, takenAt: dateToCstIso(fsTime), source };
 }
 
 async function main() {
