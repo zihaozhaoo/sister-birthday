@@ -1357,11 +1357,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
 
 
 /* ============================================================
-   背景音乐开关（右上角浮岛）
+   背景音乐开关（右下角浮岛，避免和顶部计数器抢位置）
    ============================================================ */
 .music-toggle {
   position: fixed;
-  top: clamp(10px, 1.6vh, 18px);
+  /* 抬到 pager 上方一点，不挤翻页器 */
+  bottom: clamp(80px, 11vh, 120px);
   right: clamp(10px, 1.6vw, 22px);
   z-index: 200;
   display: inline-flex;
@@ -1450,3 +1451,241 @@ button { font: inherit; color: inherit; cursor: pointer; }
 }
 .chapter .washi-tl-1,
 .chapter .washi-tl-2 { top: clamp(8px, 1.2vh, 20px); }
+
+
+/* ============================================================
+   5. PHOTO SCENE — 一张照片 = 一页（按时间升序滑过）
+   每张照片独占一屏，居中大拍立得；右上角章节戳 + 左上角计数器。
+   ============================================================ */
+.photo-scene {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  gap: clamp(8px, 1.4vh, 18px);
+  padding-top: clamp(12px, 2vh, 24px);
+  padding-left: clamp(14px, 3vw, 36px);
+  padding-right: clamp(14px, 3vw, 36px);
+  /* padding-bottom 由 .scene 接管，给 pager 留位 */
+  /* 章节切换时背景平滑过渡，不是 hard cut */
+  transition: background 0.6s ease;
+}
+
+/* 头部：章节戳 + 进度计数器（左右两端） */
+.ps-header {
+  position: relative;
+  z-index: 6;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: clamp(4px, 1vh, 10px) clamp(4px, 1vw, 12px);
+}
+
+.stamp-ps {
+  position: relative;
+  display: inline-block;
+  font-family: var(--f-display);
+  font-size: clamp(14px, 1.6vw, 20px);
+  color: #c41a78;
+  border: 3px solid #c41a78;
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, .55);
+  transform: rotate(-3deg);
+  opacity: .92;
+  letter-spacing: .12em;
+  top: auto; left: auto;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+.ps-counter {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--f-pixel);
+  font-size: clamp(20px, 2.4vw, 30px);
+  color: var(--ink);
+  background: rgba(255, 255, 255, .65);
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: 4px 14px;
+  transform: rotate(2deg);
+  letter-spacing: .08em;
+  font-style: normal;
+}
+.ps-counter em {
+  font-style: normal;
+  font-family: var(--f-display);
+  color: var(--neon-pink);
+  font-size: 1.1em;
+  text-shadow: 1px 1px 0 #fff;
+}
+
+/* 主体：拍立得居中 */
+.ps-body {
+  position: relative;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  padding: clamp(8px, 1.5vh, 20px) 0 clamp(16px, 3vh, 32px);
+  min-height: 0;
+}
+
+/* 大拍立得（一张照片一页的主角） */
+.polaroid-hero {
+  position: relative;
+  background: #fffaf2;
+  padding: clamp(10px, 1.4vw, 18px) clamp(10px, 1.4vw, 18px) clamp(36px, 5vh, 60px);
+  border: 2px solid rgba(26, 0, 40, .25);
+  box-shadow: 8px 10px 0 rgba(26, 0, 40, .22);
+  transform: rotate(var(--rot, 0deg));
+  /* 在视口里尽可能大；高度限制让 portrait/landscape 都不溢出 */
+  max-width: min(86vw, 720px);
+  max-height: min(72vh, 760px);
+  /* 内部 picture 用 flex 撑大但不溢出 */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+/* 翻页动画：每次换 hero 时短暂淡入 + 微弹，外壳不动 */
+@keyframes hero-flip-in {
+  0%   { opacity: 0; transform: rotate(var(--rot, 0deg)) scale(.94) translateY(8px); }
+  60%  { opacity: 1; }
+  100% { opacity: 1; transform: rotate(var(--rot, 0deg)) scale(1) translateY(0); }
+}
+.polaroid-hero.is-flipping {
+  animation: hero-flip-in .42s cubic-bezier(.2, .85, .3, 1.15);
+}
+@media (prefers-reduced-motion: reduce) {
+  .polaroid-hero.is-flipping { animation: none; }
+}
+.polaroid-hero picture {
+  display: flex;
+  justify-content: center;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+.polaroid-hero img {
+  display: block;
+  max-width: 100%;
+  max-height: min(60vh, 640px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  background: rgba(26, 0, 40, .06);
+}
+
+.polaroid-hero figcaption {
+  margin-top: clamp(10px, 1.4vh, 16px);
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 0 6px;
+}
+.ps-date {
+  font-family: var(--f-hand);
+  font-weight: 700;
+  font-size: clamp(24px, 3vw, 36px);
+  color: var(--ink);
+  letter-spacing: .04em;
+}
+.ps-note {
+  font-family: var(--f-hand);
+  font-weight: 600;
+  font-size: clamp(18px, 2.2vw, 26px);
+  color: var(--neon-pink);
+  text-shadow: 1px 1px 0 #fff;
+  transform: rotate(-2deg);
+}
+
+/* photo-scene 内的背景纸 / washi 布局：左上 / 右下，给中心 polaroid 留空白 */
+.paper-ps-lined {
+  top: clamp(6px, 1vh, 18px);
+  left: clamp(-30px, -2vw, -10px);
+  height: clamp(180px, 28vh, 320px);
+  width: clamp(140px, 22%, 260px);
+}
+.paper-ps-pink {
+  bottom: clamp(96px, 14vh, 160px);
+  right: clamp(-40px, -3vw, -16px);
+  height: clamp(200px, 32vh, 380px);
+  width: clamp(180px, 28%, 360px);
+}
+.washi-ps-1 {
+  top: clamp(8px, 1.2vh, 18px);
+  left: 6%;
+  width: clamp(80px, 14vw, 180px);
+  transform: rotate(-12deg);
+}
+.washi-ps-2 {
+  top: clamp(60px, 9vh, 110px);
+  right: 8%;
+  width: clamp(70px, 12vw, 140px);
+  transform: rotate(18deg);
+}
+
+/* 漂浮 emoji（chapters.js 注入，位置和颜色用 inline style） */
+.ps-floater {
+  position: absolute;
+  font-size: clamp(22px, 3.4vw, 44px);
+  z-index: 4;
+  transform: rotate(var(--rot, 0deg));
+  filter: drop-shadow(2px 2px 0 rgba(26, 0, 40, .15));
+  animation: ps-float 4.5s ease-in-out infinite alternate;
+  animation-delay: var(--delay, 0s);
+  pointer-events: none;
+}
+@keyframes ps-float {
+  from { transform: rotate(var(--rot, 0deg)) translateY(0); }
+  to   { transform: rotate(var(--rot, 0deg)) translateY(-12px); }
+}
+
+/* 触屏 / 减少动画：去 hover/animation */
+@media (hover: none) {
+  .polaroid-hero { transition: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .polaroid-hero { transition: none; }
+  .ps-floater { animation: none; }
+}
+
+/* 窄屏：缩头部、放大照片占比 */
+@media (max-width: 640px) {
+  .stamp-ps { font-size: 12px; padding: 4px 10px; letter-spacing: .08em; }
+  .ps-counter { font-size: 16px; padding: 3px 10px; }
+  .polaroid-hero {
+    max-width: 92vw;
+    max-height: 70vh;
+    padding: 8px 8px 30px;
+  }
+  .polaroid-hero img { max-height: 56vh; }
+  .ps-date { font-size: 22px; }
+  .ps-note { font-size: 16px; }
+}
+
+/* 翻页计数器（替代 dots，避免 162 个点） */
+.pager-counter {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 4px;
+  font-family: var(--f-display);
+  font-size: clamp(14px, 1.4vw, 18px);
+  color: var(--ink);
+  background: #fff;
+  border: 2px solid var(--ink);
+  border-radius: 999px;
+  padding: clamp(6px, 1vh, 10px) clamp(12px, 1.4vw, 18px);
+  letter-spacing: .06em;
+  box-shadow: 3px 4px 0 var(--ink);
+  min-width: clamp(70px, 9vw, 110px);
+  justify-content: center;
+}
+.pager-counter em {
+  font-style: normal;
+  color: var(--neon-pink);
+  font-size: 1.15em;
+}
+.pc-sep {
+  margin: 0 2px;
+  opacity: .55;
+}

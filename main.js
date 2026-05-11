@@ -1,48 +1,92 @@
-// 入口：先让 chapters.js 把动态章节灌进 DOM，再绑定翻页/键盘/触摸/光粉。
+// 入口：让 chapters.js 构造唯一的 photo-stage，然后用"虚拟 scenes"实现一张照片一翻：
+// scenes 是 static DOM scene + N 个 photo entry 混合的数组；翻到 photo entry 时
+// 只调用 NB.renderHero 换 hero 内容，不切换 DOM scene，外壳/装饰稳定不闪烁。
 
 const $ = (sel) => document.querySelector(sel);
 const $$ = (sel) => document.querySelectorAll(sel);
 
 let scenes = [];
+let staticEls = [];
+let photoStage = null;
 let currentIdx = 0;
 let prevBtn, nextBtn;
 
+function clamp(v, lo, hi) {
+  return Math.max(lo, Math.min(hi, v));
+}
+
 function show(target) {
-  const idx = Math.max(0, Math.min(scenes.length - 1, target));
+  const idx = clamp(target, 0, scenes.length - 1);
   if (idx === currentIdx) return;
 
-  scenes.forEach((s, j) => {
-    s.classList.toggle("hidden", j !== idx);
-    s.classList.toggle("show", j === idx);
-  });
-  scenes[idx].scrollIntoView({ behavior: "smooth", block: "start" });
+  const next = scenes[idx];
+  const prev = scenes[currentIdx];
+  const enteringPhoto = next.type === "photo";
+  const leavingPhoto = prev && prev.type === "photo";
+
+  if (enteringPhoto) {
+    // 内容切换：只换 hero，不切 scene
+    window.NB.renderHero(next.entry, next.photoIdx, window.NB.photoTotal);
+
+    if (!leavingPhoto) {
+      // 从 static (开场/封面) 第一次进入 photo-stage
+      staticEls.forEach((el) => {
+        el.classList.add("hidden");
+        el.classList.remove("show");
+      });
+      photoStage.classList.remove("hidden");
+      photoStage.classList.add("show");
+      photoStage.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    // photo → photo: 不滚动，外壳保持
+  } else {
+    // 切到 static scene
+    staticEls.forEach((el) => {
+      el.classList.add("hidden");
+      el.classList.remove("show");
+    });
+    if (photoStage) {
+      photoStage.classList.add("hidden");
+      photoStage.classList.remove("show");
+    }
+    next.el.classList.remove("hidden");
+    next.el.classList.add("show");
+    next.el.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
   currentIdx = idx;
   updatePager();
 }
 
-function updatePager() {
-  $$(".pager-dots .dot").forEach((d, j) => d.classList.toggle("active", j === currentIdx));
-  prevBtn.disabled = currentIdx === 0;
-  nextBtn.disabled = currentIdx === scenes.length - 1;
+function pad3(n) {
+  return n < 10 ? "00" + n : n < 100 ? "0" + n : "" + n;
 }
 
-function renderPagerDots(count) {
-  const ol = $(".pager-dots");
-  ol.innerHTML = "";
-  const frag = document.createDocumentFragment();
-  for (let i = 0; i < count; i++) {
-    const li = document.createElement("li");
-    li.className = "dot" + (i === 0 ? " active" : "");
-    frag.appendChild(li);
+function updatePager() {
+  const counter = $(".pager-counter");
+  if (counter) {
+    const cur = scenes[currentIdx];
+    if (!cur || cur.type === "static") {
+      counter.innerHTML = `<em>${currentIdx === 0 ? "开场" : "封面"}</em>`;
+    } else {
+      const total = window.NB.photoTotal || 0;
+      counter.innerHTML = `<em>${pad3(cur.photoIdx + 1)}</em><span class="pc-sep">/</span>${pad3(total)}`;
+    }
   }
-  ol.appendChild(frag);
+  if (prevBtn) prevBtn.disabled = currentIdx === 0;
+  if (nextBtn) nextBtn.disabled = currentIdx === scenes.length - 1;
+}
+
+function renderPagerCounter() {
+  const ol = $(".pager-dots");
+  if (!ol) return;
+  ol.outerHTML = '<div class="pager-counter" aria-hidden="true"></div>';
 }
 
 function bindNavigation() {
   prevBtn = $("#prevBtn");
   nextBtn = $("#nextBtn");
 
-  // 音频解锁已由 bindPressPlayEarly 提前绑好；这里只挂场景跳转
   $("#playBtn").addEventListener("click", () => show(1));
   prevBtn.addEventListener("click", () => show(currentIdx - 1));
   nextBtn.addEventListener("click", () => show(currentIdx + 1));
@@ -63,11 +107,13 @@ function bindNavigation() {
   });
 
   let touchStartY = null;
+  let touchStartX = null;
   document.addEventListener(
     "touchstart",
     (e) => {
       if (e.target.closest("button, a, picture, img")) return;
       touchStartY = e.touches[0].clientY;
+      touchStartX = e.touches[0].clientX;
     },
     { passive: true }
   );
@@ -77,8 +123,15 @@ function bindNavigation() {
       if (touchStartY === null) return;
       if (e.target.closest("button, a, picture, img")) return;
       const dy = e.changedTouches[0].clientY - touchStartY;
+      const dx = e.changedTouches[0].clientX - touchStartX;
       touchStartY = null;
-      if (Math.abs(dy) > 80) show(currentIdx + (dy < 0 ? 1 : -1));
+      touchStartX = null;
+      // 水平滑动也支持（一张照片一页时，左右滑更自然）
+      if (Math.abs(dx) > 60 && Math.abs(dx) > Math.abs(dy)) {
+        show(currentIdx + (dx < 0 ? 1 : -1));
+      } else if (Math.abs(dy) > 80) {
+        show(currentIdx + (dy < 0 ? 1 : -1));
+      }
     },
     { passive: true }
   );
@@ -139,9 +192,9 @@ function bindSparkles() {
 }
 
 
-// ====== 背景音乐（PRESS PLAY 解锁 + 右上角随时切换） ======
+// ====== 背景音乐（PRESS PLAY 解锁 + 右下角随时切换） ======
 let audio, musicToggle;
-let pendingRetry = false; // 浏览器拒绝过 play() 时挂的全局兜底
+let pendingRetry = false;
 
 function setMusicState(playing) {
   if (!musicToggle) return;
@@ -168,13 +221,11 @@ function tryPlay() {
 function armRetryFallback() {
   if (pendingRetry) return;
   pendingRetry = true;
-  // 只要用户在页面上再点 / 触摸 / 按键一次，就重试一次
   const retry = () => {
     document.removeEventListener("click", retry, true);
     document.removeEventListener("touchend", retry, true);
     document.removeEventListener("keydown", retry, true);
     tryPlay().catch(() => {
-      // 第二次还失败说明是权限/系统级（iOS 静音键），交给用户自己点右上角
       pendingRetry = false;
     });
   };
@@ -187,7 +238,6 @@ function armMusic() {
   if (!audio) return;
   if (!audio.paused) return;
   tryPlay().catch((err) => {
-    // eslint-disable-next-line no-console
     console.warn("[bgm] play blocked:", err && err.message);
     armRetryFallback();
   });
@@ -209,13 +259,10 @@ function bindMusic() {
     }
   });
 
-  // 浏览器自动暂停 / 切标签页时同步状态
   audio.addEventListener("play", () => setMusicState(true));
   audio.addEventListener("pause", () => setMusicState(false));
 }
 
-// 在 chapters 还没加载好时就把 PRESS PLAY 的「音频解锁」绑上，
-// 避免用户看见按钮就点、但 click handler 还没注册的竞态。
 function bindPressPlayEarly() {
   const playBtn = document.getElementById("playBtn");
   if (!playBtn) return;
@@ -223,14 +270,12 @@ function bindPressPlayEarly() {
 }
 
 async function init() {
-  // 音频元素 + PRESS PLAY 解锁：在 chapters 异步加载之前先绑好
   bindMusic();
   bindPressPlayEarly();
 
   try {
     await window.NB.buildChapters();
   } catch (err) {
-    // 章节构建失败时给 mount 注入降级提示，避免页面看起来"半截"
     const mount = document.getElementById("chapters-mount");
     if (mount) {
       mount.innerHTML = `
@@ -242,12 +287,19 @@ async function init() {
           </div>
         </section>`;
     }
-    // eslint-disable-next-line no-console
     console.error("[chapters] build failed:", err);
   }
 
-  scenes = [...$$(".scene")];
-  renderPagerDots(scenes.length);
+  // 构建 scenes 列表：static (开场幕 + 封面) 在前，photo entries 紧随
+  staticEls = [$("#curtain"), $("#cover")];
+  photoStage = document.getElementById("photo-stage");
+  const photoSeries = (window.NB && window.NB.photoSeries) || [];
+  scenes = [
+    ...staticEls.map((el) => ({ type: "static", el })),
+    ...photoSeries.map((entry, i) => ({ type: "photo", entry, photoIdx: i })),
+  ];
+
+  renderPagerCounter();
   bindNavigation();
   bindSparkles();
   updatePager();

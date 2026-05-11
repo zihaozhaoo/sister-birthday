@@ -1,5 +1,10 @@
-// 时间线章节渲染：读 data/photos.json，按"年·季"分章，每章生成一张拼贴照片墙。
-// 输出挂到 #chapters-mount，被 main.js 当作 .scene 接管翻页。
+// 时间线渲染：读 data/photos.json，按拍摄时间升序排，所有照片共享同一个 photo-stage 容器。
+// 翻页时只换中心 hero（照片 + 日期 + 计数器 + 章节戳），外壳/装饰保持稳定。
+//
+// 暴露：
+//   NB.buildChapters() — 构造唯一的 #photo-stage 并装载首张
+//   NB.renderHero(entry, idx, total) — 切换中心 hero
+//   NB.photoSeries — 排序后的照片条目数组（main.js 用来翻页）
 
 (() => {
   const NS = (window.NB = window.NB || {});
@@ -19,24 +24,20 @@
     return acc;
   }, {});
 
-  const ZH_NUM = ["零", "一", "二", "三", "四", "五", "六", "七", "八", "九", "十", "十一", "十二"];
-
   function parseTakenAt(iso) {
-    // "2020-04-06T14:01:11" — 不带时区，按本地时间构造
     const [d, t = "00:00:00"] = iso.split("T");
     const [y, mo, da] = d.split("-").map(Number);
     const [h, mi, s] = t.split(":").map(Number);
     return new Date(y, mo - 1, da, h, mi, s);
   }
 
-  function chapterOf(date) {
+  function chapterKeyOf(date) {
     const m = date.getMonth() + 1;
-    const season = SEASON_BY_MONTH[m];
-    return { year: date.getFullYear(), season, month: m };
+    return { year: date.getFullYear(), season: SEASON_BY_MONTH[m] };
   }
 
   // ============================================================
-  // 字符串小工具
+  // 小工具
   // ============================================================
 
   function hash(str) {
@@ -45,209 +46,126 @@
     return Math.abs(h);
   }
 
-  function pad2(n) {
-    return n < 10 ? "0" + n : "" + n;
-  }
+  const pad2 = (n) => (n < 10 ? "0" + n : "" + n);
+  const pad3 = (n) => (n < 10 ? "00" + n : n < 100 ? "0" + n : "" + n);
 
   // ============================================================
-  // 剪报字母调色板（与 cover 视觉宇宙保持一致）
+  // 场景视觉变体（4 套循环，按章节 index 切换）
   // ============================================================
 
-  const ROMAN_PALETTE = [
-    { bg: "#ffffff", c: "#1a0028", font: "'Bowlby One',sans-serif" },
-    { bg: "#ffe45e", c: "#c41a78", font: "Anton,sans-serif" },
-    { bg: "#ffb3da", c: "#1a2c8c", font: "'Permanent Marker',cursive" },
-    { bg: "#c8e8ff", c: "#1d6b3a", font: "Bungee,sans-serif" },
-    { bg: "#ff8ad1", c: "#1a0028", font: "Shrikhand,serif" },
-    { bg: "#b8ffd9", c: "#1a2c8c", font: "'Rubik Mono One',sans-serif" },
-    { bg: "#d8c8ff", c: "#1a0028", font: "Frijole,cursive" },
-    { bg: "#ffcfa8", c: "#c41a78", font: "Bungee,sans-serif" },
-    { bg: "#fffafd", c: "#6f2dc4", font: "Anton,sans-serif" },
-    { bg: "#ffe45e", c: "#1a0028", font: "'Bebas Neue',sans-serif" },
+  const SCENE_VARIANTS = [
+    {
+      bg: "linear-gradient(180deg, #ffd6ec 0%, #d8c8ff 55%, #ffe45e 100%)",
+      paperPink: "#ffa3d1",
+      washiTop: "var(--bubble-pink)",
+      washiAccent: "var(--cream-yellow)",
+    },
+    {
+      bg: "linear-gradient(180deg, #fff4dc 0%, #ffd6ec 50%, #d8c8ff 100%)",
+      paperPink: "#ffc1dd",
+      washiTop: "var(--cream-yellow)",
+      washiAccent: "var(--mint)",
+    },
+    {
+      bg: "linear-gradient(180deg, #d8f5e7 0%, #ffd6ec 50%, #fff4dc 100%)",
+      paperPink: "#ff8ad1",
+      washiTop: "var(--mint)",
+      washiAccent: "var(--bubble-pink)",
+    },
+    {
+      bg: "linear-gradient(180deg, #e8d8ff 0%, #ffd6ec 50%, #b8ffd9 100%)",
+      paperPink: "#ffd6ec",
+      washiTop: "var(--baby-violet)",
+      washiAccent: "var(--cream-yellow)",
+    },
   ];
 
-  const CN_PALETTE = [
-    { bg: "#ff8ad1", c: "#1a0028", font: "'ZCOOL KuaiLe',cursive" },
-    { bg: "#ffe45e", c: "#c41a78", font: "'Ma Shan Zheng',cursive" },
-    { bg: "#b8ffd9", c: "#1a0028", font: "'ZCOOL XiaoWei',serif" },
-    { bg: "#d8c8ff", c: "#6f2dc4", font: "'Long Cang',cursive" },
-    { bg: "#ffffff", c: "#c41a78", font: "'Ma Shan Zheng',cursive" },
+  const HAND_NOTES = [
+    "♡",
+    "✦",
+    "★",
+    "诺宝 ✿",
+    "小寿星 ♡",
+    "可爱本爱",
+    "甜甜",
+    "舞台 ✨",
+    "镜头前",
+    "炸 ✦",
+    "Cute!",
+    "Pose ★",
+    "love this",
+    "off-stage",
+    "this one ♡",
   ];
-
-  function ransomLetter(ch, paletteIdx, rotIdx, isChinese, isAccent) {
-    const palette = isChinese ? CN_PALETTE : ROMAN_PALETTE;
-    const sty = palette[paletteIdx % palette.length];
-    const rot = ((rotIdx % 7) - 3) * 1.4;
-    const span = document.createElement("span");
-    span.className = "rl" + (isChinese ? " cn" : "") + (isAccent ? " big" : "");
-    span.style.cssText = `--bg:${sty.bg};--c:${sty.c};--rot:${rot}deg;--font:${sty.font}`;
-    span.textContent = ch;
-    return span;
-  }
-
-  function buildRansomTitle(year, seasonCn, seedKey) {
-    const seed = hash(seedKey);
-    const wrap = document.createElement("h3");
-    wrap.className = "ransom ransom-ch";
-    wrap.setAttribute("aria-label", `${year} ${seasonCn}`);
-
-    const row = document.createElement("span");
-    row.className = "rl-row";
-
-    const yearStr = String(year);
-    [...yearStr].forEach((digit, i) => {
-      row.appendChild(ransomLetter(digit, seed + i, seed + i * 3, false, false));
-    });
-
-    // 中点分隔（小字号）
-    const dot = ransomLetter("·", seed + 9, seed + 2, false, false);
-    dot.classList.add("rl-dot");
-    row.appendChild(dot);
-
-    row.appendChild(ransomLetter(seasonCn, seed + 7, seed + 11, true, true));
-
-    wrap.appendChild(row);
-    return wrap;
-  }
+  const pickHandNote = (seed) => HAND_NOTES[seed % HAND_NOTES.length];
 
   // ============================================================
-  // 章节装饰：根据 index 切换变体（4 套循环）
+  // 外壳装饰（一次性渲染，整个 photo-stage 共用）
   // ============================================================
 
-  const CH_VARIANTS = [
-    { paperPink: "#ffa3d1", washiTop: "var(--bubble-pink)", washiAccent: "var(--cream-yellow)" },
-    { paperPink: "#ffc1dd", washiTop: "var(--cream-yellow)", washiAccent: "var(--mint)" },
-    { paperPink: "#ff8ad1", washiTop: "var(--mint)", washiAccent: "var(--bubble-pink)" },
-    { paperPink: "#ffd6ec", washiTop: "var(--baby-violet)", washiAccent: "var(--cream-yellow)" },
-  ];
+  function appendStageDecor(stage) {
+    const decor = document.createDocumentFragment();
 
-  function buildDecor(variantIdx) {
-    const frag = document.createDocumentFragment();
-    const v = CH_VARIANTS[variantIdx % CH_VARIANTS.length];
-
-    // 全息 + 网格背景层
     const holo = document.createElement("div");
     holo.className = "holo-bg";
     holo.setAttribute("aria-hidden", "true");
-    frag.appendChild(holo);
+    decor.appendChild(holo);
 
     const grid = document.createElement("div");
     grid.className = "grid-bg";
     grid.setAttribute("aria-hidden", "true");
-    frag.appendChild(grid);
+    decor.appendChild(grid);
 
-    // 撕纸大块（沿用 timeline 既有定位类）
     const lined = document.createElement("div");
-    lined.className = "paper paper-lined paper-lined-tl";
+    lined.className = "paper paper-lined paper-ps-lined";
     lined.setAttribute("aria-hidden", "true");
-    frag.appendChild(lined);
+    decor.appendChild(lined);
 
     const pink = document.createElement("div");
-    pink.className = "paper paper-pink paper-pink-tl";
-    pink.style.setProperty("--paper-color", v.paperPink);
+    pink.className = "paper paper-pink paper-ps-pink";
+    pink.id = "ps-paper-pink";
     pink.setAttribute("aria-hidden", "true");
-    frag.appendChild(pink);
+    decor.appendChild(pink);
 
-    const mint = document.createElement("div");
-    mint.className = "paper paper-mint paper-mint-tl";
-    mint.setAttribute("aria-hidden", "true");
-    frag.appendChild(mint);
-
-    // washi tape 两条
     const w1 = document.createElement("span");
-    w1.className = "washi washi-tl-1";
-    w1.style.setProperty("--tape", v.washiTop);
+    w1.className = "washi washi-ps-1";
+    w1.id = "ps-washi-1";
     w1.setAttribute("aria-hidden", "true");
-    frag.appendChild(w1);
+    decor.appendChild(w1);
 
     const w2 = document.createElement("span");
-    w2.className = "washi washi-tl-2";
-    w2.style.setProperty("--tape", v.washiAccent);
+    w2.className = "washi washi-ps-2";
+    w2.id = "ps-washi-2";
     w2.setAttribute("aria-hidden", "true");
-    frag.appendChild(w2);
+    decor.appendChild(w2);
 
-    return frag;
-  }
+    // 固定漂浮：4 个 emoji 散落（位置随章节略动 → 但目前固定，避免每翻一张视觉跳动）
+    const emojiPool = [
+      ["💖", 10, 16],
+      ["🦋", 88, 14],
+      ["✨", 8, 78],
+      ["🎀", 86, 82],
+    ];
+    emojiPool.forEach(([ch, x, y], i) => {
+      const span = document.createElement("span");
+      span.className = "ps-floater";
+      span.style.left = `${x}%`;
+      span.style.top = `${y}%`;
+      span.style.setProperty("--rot", `${(i * 4 - 6).toFixed(0)}deg`);
+      span.style.setProperty("--delay", `${i * 0.5}s`);
+      span.textContent = ch;
+      span.setAttribute("aria-hidden", "true");
+      decor.appendChild(span);
+    });
 
-  function buildChapterHead(chapterIdx, year, seasonCn, monthsCovered) {
-    const head = document.createElement("header");
-    head.className = "ch-head";
-
-    const stamp = document.createElement("span");
-    stamp.className = "stamp stamp-ch";
-    stamp.textContent = `CH·${pad2(chapterIdx + 1)}`;
-    head.appendChild(stamp);
-
-    head.appendChild(buildRansomTitle(year, seasonCn, `${year}-${seasonCn}`));
-
-    const sub = document.createElement("p");
-    sub.className = "caveat ch-sub";
-    const monthsStr = monthsCovered.map((m) => `${ZH_NUM[m]}月`).join(" · ");
-    sub.textContent = `${monthsStr}  ✿`;
-    head.appendChild(sub);
-
-    return head;
-  }
-
-  // ============================================================
-  // 拍立得
-  // ============================================================
-
-  const PHOTO_DIR = "public/photos";
-
-  function polaroidFor(photo, idx, seed) {
-    const base = photo.file.replace(/\.[^.]+$/, "");
-    const fig = document.createElement("figure");
-    fig.className = "polaroid";
-
-    // 旋转：按 hash 选 -5° ~ +5°
-    const rot = (((seed + idx * 13) % 11) - 5) * 0.9;
-    fig.style.setProperty("--rot", `${rot.toFixed(2)}deg`);
-
-    // 间或加一段 washi 胶带角（每 3 张一张胶带）
-    if ((seed + idx) % 3 === 0) {
-      const tape = document.createElement("span");
-      tape.className = "tape-corner " + ((seed + idx) % 2 === 0 ? "tl" : "tr");
-      tape.setAttribute("aria-hidden", "true");
-      fig.appendChild(tape);
-    }
-
-    const picture = document.createElement("picture");
-
-    const source = document.createElement("source");
-    source.type = "image/webp";
-    const thumb = `${PHOTO_DIR}/${base}-thumb.webp`;
-    const medium = `${PHOTO_DIR}/${base}-medium.webp`;
-    const large = `${PHOTO_DIR}/${base}-large.webp`;
-    source.srcset = `${thumb} 320w, ${medium} 1280w, ${large} 2400w`;
-    source.sizes = "(max-width: 600px) 90vw, (max-width: 1100px) 45vw, 30vw";
-    picture.appendChild(source);
-
-    const img = document.createElement("img");
-    img.src = medium;
-    img.alt = "";
-    img.loading = "lazy";
-    img.decoding = "async";
-    if (photo.width && photo.height) {
-      img.width = photo.width;
-      img.height = photo.height;
-    }
-    picture.appendChild(img);
-
-    fig.appendChild(picture);
-
-    // 日期标签（手帐风：4·6）
-    const cap = document.createElement("figcaption");
-    const d = parseTakenAt(photo.takenAt);
-    cap.textContent = `${d.getMonth() + 1}·${pad2(d.getDate())}`;
-    fig.appendChild(cap);
-
-    return fig;
+    stage.appendChild(decor);
   }
 
   // ============================================================
   // 主流程
   // ============================================================
+
+  const PHOTO_DIR = "public/photos";
 
   async function loadManifest() {
     const res = await fetch("data/photos.json", { cache: "no-cache" });
@@ -255,82 +173,196 @@
     return res.json();
   }
 
-  function groupChapters(photos) {
-    // 仅图片（视频另行处理），按"年·季"分组
-    const buckets = new Map();
-    for (const p of photos) {
-      if (!p.selected || p.kind !== "image" || p.broken) continue;
+  function buildPhotoSeries(photos) {
+    const selected = photos.filter(
+      (p) => p.selected && p.kind === "image" && !p.broken
+    );
+    selected.sort((a, b) => (a.takenAt < b.takenAt ? -1 : a.takenAt > b.takenAt ? 1 : 0));
+
+    const seasonOrder = { spring: 0, summer: 1, autumn: 2, winter: 3 };
+    const chapterKeys = [];
+    const seenKeys = new Set();
+    for (const p of selected) {
       const d = parseTakenAt(p.takenAt);
-      const ch = chapterOf(d);
+      const ch = chapterKeyOf(d);
       const key = `${ch.year}-${ch.season.key}`;
-      if (!buckets.has(key)) {
-        buckets.set(key, {
-          key,
-          year: ch.year,
-          season: ch.season,
-          photos: [],
-          months: new Set(),
-        });
+      if (!seenKeys.has(key)) {
+        seenKeys.add(key);
+        chapterKeys.push({ key, year: ch.year, seasonKey: ch.season.key, seasonCn: ch.season.cn });
       }
-      const b = buckets.get(key);
-      b.photos.push(p);
-      b.months.add(ch.month);
+    }
+    chapterKeys.sort(
+      (a, b) =>
+        a.year - b.year || seasonOrder[a.seasonKey] - seasonOrder[b.seasonKey]
+    );
+    const chapterIdxByKey = new Map();
+    chapterKeys.forEach((ck, i) => chapterIdxByKey.set(ck.key, i));
+
+    return selected.map((p) => {
+      const d = parseTakenAt(p.takenAt);
+      const ch = chapterKeyOf(d);
+      const key = `${ch.year}-${ch.season.key}`;
+      return {
+        photo: p,
+        year: ch.year,
+        seasonCn: ch.season.cn,
+        chapterIdx: chapterIdxByKey.get(key),
+      };
+    });
+  }
+
+  function buildHeroShell() {
+    const fig = document.createElement("figure");
+    fig.className = "polaroid polaroid-hero";
+    fig.id = "hero-polaroid";
+
+    const tape = document.createElement("span");
+    tape.className = "tape-corner tl";
+    tape.id = "hero-tape";
+    tape.setAttribute("aria-hidden", "true");
+    fig.appendChild(tape);
+
+    const picture = document.createElement("picture");
+    picture.id = "hero-picture";
+    const source = document.createElement("source");
+    source.id = "hero-source";
+    source.type = "image/webp";
+    picture.appendChild(source);
+    const img = document.createElement("img");
+    img.id = "hero-img";
+    img.alt = "";
+    img.decoding = "async";
+    picture.appendChild(img);
+    fig.appendChild(picture);
+
+    const cap = document.createElement("figcaption");
+    const date = document.createElement("span");
+    date.className = "ps-date";
+    date.id = "hero-date";
+    cap.appendChild(date);
+    const note = document.createElement("span");
+    note.className = "ps-note";
+    note.id = "hero-note";
+    cap.appendChild(note);
+    fig.appendChild(cap);
+
+    return fig;
+  }
+
+  // ============================================================
+  // 渲染 hero（翻页时调用，不重建 DOM）
+  // ============================================================
+
+  NS.renderHero = function renderHero(entry, idx, total) {
+    const { photo, year, seasonCn, chapterIdx } = entry;
+    const variant = SCENE_VARIANTS[chapterIdx % SCENE_VARIANTS.length];
+    const stage = document.getElementById("photo-stage");
+    if (!stage) return;
+
+    // 背景渐变 + 装饰配色：CSS transition 平滑过渡（同章节内完全不变）
+    stage.style.background = variant.bg;
+    stage.dataset.variant = String(chapterIdx % SCENE_VARIANTS.length);
+    const pink = document.getElementById("ps-paper-pink");
+    if (pink) pink.style.setProperty("--paper-color", variant.paperPink);
+    const w1 = document.getElementById("ps-washi-1");
+    const w2 = document.getElementById("ps-washi-2");
+    if (w1) w1.style.setProperty("--tape", variant.washiTop);
+    if (w2) w2.style.setProperty("--tape", variant.washiAccent);
+
+    // 章节戳 + 进度计数器
+    const stamp = document.getElementById("ps-stamp");
+    if (stamp) stamp.textContent = `${year} · ${seasonCn}`;
+    const counter = document.getElementById("ps-counter");
+    if (counter) counter.innerHTML = `<em>${pad3(idx + 1)}</em> / ${pad3(total)}`;
+
+    // Hero picture（只换 src/srcset，不重建节点）
+    const base = photo.file.replace(/\.[^.]+$/, "");
+    const thumb = `${PHOTO_DIR}/${base}-thumb.webp`;
+    const medium = `${PHOTO_DIR}/${base}-medium.webp`;
+    const large = `${PHOTO_DIR}/${base}-large.webp`;
+    const source = document.getElementById("hero-source");
+    const img = document.getElementById("hero-img");
+    if (source) {
+      source.srcset = `${thumb} 320w, ${medium} 1280w, ${large} 2400w`;
+      source.sizes = "(max-width: 600px) 84vw, (max-width: 1100px) 60vw, 50vw";
+    }
+    if (img) {
+      img.src = medium;
+      if (photo.width && photo.height) {
+        img.width = photo.width;
+        img.height = photo.height;
+      } else {
+        img.removeAttribute("width");
+        img.removeAttribute("height");
+      }
     }
 
-    // 排序：按年 → 按季节顺序（春夏秋冬，但 winter 跨年用所属年）
-    const seasonOrder = { spring: 0, summer: 1, autumn: 2, winter: 3 };
-    return [...buckets.values()]
-      .map((b) => ({
-        ...b,
-        photos: [...b.photos].sort((a, z) => a.takenAt.localeCompare(z.takenAt)),
-        months: [...b.months].sort((a, z) => a - z),
-      }))
-      .sort((a, z) => a.year - z.year || seasonOrder[a.season.key] - seasonOrder[z.season.key]);
-  }
+    // 日期 + 旁注
+    const seed = hash(photo.file);
+    const d = parseTakenAt(photo.takenAt);
+    const dateEl = document.getElementById("hero-date");
+    if (dateEl) dateEl.textContent = `${d.getMonth() + 1}·${pad2(d.getDate())}`;
+    const noteEl = document.getElementById("hero-note");
+    if (noteEl) noteEl.textContent = pickHandNote(seed);
 
-  function buildChapterScene(chapter, idx) {
-    const section = document.createElement("section");
-    section.id = `ch-${chapter.key}`;
-    section.className = "scene chapter hidden";
-    section.dataset.key = chapter.key;
-    section.dataset.variant = String(idx % CH_VARIANTS.length);
+    // 拍立得旋转角度 + 胶带朝向（按照片 hash）
+    const fig = document.getElementById("hero-polaroid");
+    if (fig) {
+      const rot = ((seed % 11) - 5) * 0.6;
+      fig.style.setProperty("--rot", `${rot.toFixed(2)}deg`);
 
-    section.appendChild(buildDecor(idx));
-    section.appendChild(buildChapterHead(idx, chapter.year, chapter.season.cn, chapter.months));
+      // 翻页动画：先移除再重加，强制 reflow 重启动画
+      fig.classList.remove("is-flipping");
+      void fig.offsetWidth;
+      fig.classList.add("is-flipping");
+    }
+    const tape = document.getElementById("hero-tape");
+    if (tape) tape.className = "tape-corner " + (seed % 2 === 0 ? "tl" : "tr");
+  };
 
-    const body = document.createElement("div");
-    body.className = "chapter-body";
-    const wall = document.createElement("div");
-    wall.className = "photo-wall";
-
-    const seed = hash(chapter.key);
-    chapter.photos.forEach((p, i) => wall.appendChild(polaroidFor(p, i, seed)));
-
-    body.appendChild(wall);
-    section.appendChild(body);
-
-    // 章末手写小尾巴
-    const tail = document.createElement("p");
-    tail.className = "caveat ch-tail";
-    tail.textContent = chapter.photos.length === 1
-      ? "就这一张，但够珍贵 ♡"
-      : `${chapter.photos.length} 帧 · ${chapter.season.cn}天的诺宝 ♡`;
-    section.appendChild(tail);
-
-    return section;
-  }
+  // ============================================================
+  // 构造 photo-stage 容器（只跑一次）
+  // ============================================================
 
   NS.buildChapters = async function buildChapters() {
     const mount = document.getElementById("chapters-mount");
     if (!mount) throw new Error("#chapters-mount not found");
 
     const manifest = await loadManifest();
-    const chapters = groupChapters(manifest.photos);
+    const series = buildPhotoSeries(manifest.photos);
 
-    const frag = document.createDocumentFragment();
-    chapters.forEach((ch, i) => frag.appendChild(buildChapterScene(ch, i)));
-    mount.appendChild(frag);
+    const stage = document.createElement("section");
+    stage.id = "photo-stage";
+    stage.className = "scene photo-scene hidden";
+    appendStageDecor(stage);
 
-    return { chapterCount: chapters.length };
+    const head = document.createElement("header");
+    head.className = "ps-header";
+    const stamp = document.createElement("span");
+    stamp.className = "stamp stamp-ps";
+    stamp.id = "ps-stamp";
+    head.appendChild(stamp);
+    const counter = document.createElement("span");
+    counter.className = "ps-counter";
+    counter.id = "ps-counter";
+    head.appendChild(counter);
+    stage.appendChild(head);
+
+    const body = document.createElement("div");
+    body.className = "ps-body";
+    body.appendChild(buildHeroShell());
+    stage.appendChild(body);
+
+    mount.appendChild(stage);
+
+    NS.photoSeries = series;
+    NS.photoTotal = series.length;
+
+    // 初始装载第一张（隐藏状态，由 main.js 翻到时显示）
+    if (series.length > 0) {
+      NS.renderHero(series[0], 0, series.length);
+    }
+
+    return { chapterCount: series.length };
   };
 })();
