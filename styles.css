@@ -1028,27 +1028,12 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .tag-memo { right: 4%; bottom: 22%; padding: 6px 12px; }
   .doodle-circle { width: 90vw; }
 
-  /* 寿星拍立得：原位置在左上挡住了 ransom 标题的"12" → 挪到底部左侧 */
-  .cover-hero {
-    top: auto;
-    bottom: 22%;
-    left: 4%;
-    width: clamp(108px, 30vw, 160px);
-    transform: rotate(-6deg);
-  }
-  .cover-hero figcaption {
-    font-size: 13px;
-    margin-top: 6px;
-  }
-  /* 顶部胶带也压扁一点 */
-  .cover-hero-tape {
-    width: clamp(40px, 12vw, 60px);
-    height: 13px;
-  }
   /* 让出底部空间：mint-1 缩到最角落，star-stamp 也下移 */
   .paper-mint-1 { bottom: 2%; right: 4%; }
   .stamp-best { top: 74%; right: 6%; }
   .star-stamp { bottom: 8%; right: 8%; }
+  /* 寿星拍立得的 mobile override 必须放在桌面定义之后，
+     否则同 specificity 下被 1314 行的桌面规则覆盖 —— 见下方 .cover-hero 块 */
 }
 
 @media (max-width: 480px) {
@@ -1367,6 +1352,26 @@ button { font: inherit; color: inherit; cursor: pointer; }
   -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 8px, #000 calc(100% - 8px), transparent 100%);
           mask-image: linear-gradient(90deg, transparent 0, #000 8px, #000 calc(100% - 8px), transparent 100%);
   z-index: 2;
+}
+
+/* 窄屏：寿星拍立得挪到底部左侧，避开 ransom 标题的"12"。
+   这块必须放在桌面 .cover-hero 定义之后，否则同 specificity 被覆盖。 */
+@media (max-width: 640px) {
+  .cover-hero {
+    top: auto;
+    bottom: 22%;
+    left: 4%;
+    width: clamp(108px, 30vw, 160px);
+    transform: rotate(-6deg);
+  }
+  .cover-hero figcaption {
+    font-size: 13px;
+    margin-top: 6px;
+  }
+  .cover-hero-tape {
+    width: clamp(40px, 12vw, 60px);
+    height: 13px;
+  }
 }
 
 /* 触屏不要悬浮变换 */
