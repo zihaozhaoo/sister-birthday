@@ -1027,6 +1027,28 @@ button { font: inherit; color: inherit; cursor: pointer; }
   .star-stamp { width: 50px; bottom: 14%; }
   .tag-memo { right: 4%; bottom: 22%; padding: 6px 12px; }
   .doodle-circle { width: 90vw; }
+
+  /* 寿星拍立得：原位置在左上挡住了 ransom 标题的"12" → 挪到底部左侧 */
+  .cover-hero {
+    top: auto;
+    bottom: 22%;
+    left: 4%;
+    width: clamp(108px, 30vw, 160px);
+    transform: rotate(-6deg);
+  }
+  .cover-hero figcaption {
+    font-size: 13px;
+    margin-top: 6px;
+  }
+  /* 顶部胶带也压扁一点 */
+  .cover-hero-tape {
+    width: clamp(40px, 12vw, 60px);
+    height: 13px;
+  }
+  /* 让出底部空间：mint-1 缩到最角落，star-stamp 也下移 */
+  .paper-mint-1 { bottom: 2%; right: 4%; }
+  .stamp-best { top: 74%; right: 6%; }
+  .star-stamp { bottom: 8%; right: 8%; }
 }
 
 @media (max-width: 480px) {
@@ -1688,4 +1710,292 @@ button { font: inherit; color: inherit; cursor: pointer; }
 .pc-sep {
   margin: 0 2px;
   opacity: .55;
+}
+
+
+/* ============================================================
+   6. LETTER — 哥哥的信（终章 · 手帐信纸 × Y2K 拼贴标题）
+   ============================================================ */
+.letter {
+  display: grid;
+  place-items: start center;
+  padding-top: clamp(20px, 3vh, 48px);
+  padding-left: clamp(14px, 4vw, 48px);
+  padding-right: clamp(14px, 4vw, 48px);
+  /* 渐变背景：与封面/章节同色系，呼应整本杂志 */
+  background:
+    radial-gradient(ellipse at 20% 10%, rgba(255, 138, 209, .35) 0%, transparent 50%),
+    radial-gradient(ellipse at 85% 90%, rgba(184, 169, 255, .35) 0%, transparent 55%),
+    linear-gradient(180deg, #fff4dc 0%, #ffd6ec 45%, #d8c8ff 100%);
+  /* 信比较长，允许内部滚动 */
+  overflow-y: auto;
+}
+
+/* 顶部 washi tape 两条（与封面同语汇） */
+.washi-letter-1 {
+  position: absolute;
+  z-index: 3;
+  top: clamp(8px, 1.4vh, 22px);
+  left: -2%;
+  width: clamp(180px, 30vw, 360px);
+  height: clamp(28px, 4vh, 44px);
+  background:
+    repeating-linear-gradient(
+      45deg,
+      transparent 0, transparent 6px,
+      rgba(255, 255, 255, .35) 6px, rgba(255, 255, 255, .35) 12px),
+    var(--cream-yellow);
+  border-top: 1px solid rgba(26, 0, 40, .2);
+  border-bottom: 1px solid rgba(26, 0, 40, .2);
+  transform: rotate(-3deg);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 14px, #000 calc(100% - 14px), transparent 100%);
+}
+.washi-letter-2 {
+  position: absolute;
+  z-index: 3;
+  top: clamp(28px, 4vh, 48px);
+  right: -3%;
+  width: clamp(140px, 24vw, 280px);
+  height: clamp(22px, 3.4vh, 36px);
+  background:
+    repeating-linear-gradient(
+      -40deg,
+      transparent 0, transparent 5px,
+      rgba(255, 255, 255, .4) 5px, rgba(255, 255, 255, .4) 10px),
+    var(--bubble-pink);
+  border-top: 1px solid rgba(26, 0, 40, .2);
+  border-bottom: 1px solid rgba(26, 0, 40, .2);
+  transform: rotate(6deg);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0, #000 12px, #000 calc(100% - 12px), transparent 100%);
+}
+
+/* 左上邮戳：圆形 stamp 风 */
+.letter-postmark {
+  position: absolute;
+  z-index: 5;
+  top: clamp(48px, 7vh, 88px);
+  left: clamp(12px, 3vw, 36px);
+  width: clamp(96px, 14vw, 150px);
+  height: clamp(96px, 14vw, 150px);
+  border: 4px double #c41a78;
+  border-radius: 50%;
+  display: grid;
+  grid-template-rows: auto auto auto auto;
+  place-items: center;
+  gap: 1px;
+  padding: 8px 6px;
+  background: rgba(255, 255, 255, .25);
+  color: #c41a78;
+  font-family: var(--f-display);
+  text-align: center;
+  transform: rotate(-12deg);
+  opacity: .88;
+  pointer-events: none;
+}
+.lp-star { font-size: clamp(14px, 2vw, 20px); }
+.lp-big {
+  font-family: var(--f-display);
+  font-size: clamp(34px, 5vw, 52px);
+  line-height: 1;
+  letter-spacing: .02em;
+  color: var(--neon-pink);
+  text-shadow: 1.5px 1.5px 0 #fff;
+}
+.lp-line {
+  font-size: clamp(7px, 1vw, 10px);
+  letter-spacing: .14em;
+}
+.lp-line-sm { font-size: clamp(6px, .85vw, 8px); opacity: .8; }
+
+/* 信纸主体 */
+.letter-paper {
+  position: relative;
+  z-index: 6;
+  width: 100%;
+  max-width: 720px;
+  margin: clamp(72px, 10vh, 140px) auto clamp(40px, 6vh, 88px);
+  padding: clamp(40px, 6vh, 80px) clamp(28px, 6vw, 72px) clamp(36px, 5vh, 64px);
+  background: #fffaf0;
+  border: 2px solid rgba(26, 0, 40, .25);
+  /* 淡淡的横线，像信纸 */
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0,
+      transparent calc(2em - 1px),
+      rgba(170, 140, 200, .22) calc(2em - 1px),
+      rgba(170, 140, 200, .22) 2em
+    );
+  background-size: 100% 2em;
+  background-position: 0 calc(50% + 2px);
+  box-shadow: 8px 10px 0 rgba(26, 0, 40, .2);
+  transform: rotate(-0.4deg);
+}
+
+/* "贴邮票"小贴纸：信纸右上角 */
+.letter-stamp-corner {
+  position: absolute;
+  top: clamp(-16px, -1.8vh, -10px);
+  right: clamp(20px, 4vw, 56px);
+  transform: rotate(8deg);
+  z-index: 7;
+  background: var(--cream-yellow);
+  border: 2px solid var(--ink);
+  border-style: dashed;
+  padding: 6px 10px;
+  font-family: var(--f-hand);
+  font-weight: 700;
+  font-size: clamp(14px, 1.6vw, 18px);
+  color: var(--ink);
+  box-shadow: 2px 3px 0 rgba(26, 0, 40, .25);
+}
+.lsc-inner {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.lsc-emoji { font-size: 1.2em; }
+
+/* 信头：To 行 + 拼贴标题 */
+.letter-head {
+  margin-bottom: clamp(20px, 3vh, 32px);
+  text-align: center;
+  display: grid;
+  gap: clamp(8px, 1.4vh, 16px);
+  justify-items: center;
+}
+.letter-to {
+  font-size: clamp(20px, 2.4vw, 28px);
+  color: var(--neon-pink);
+  text-shadow: 1px 1px 0 #fff;
+  letter-spacing: .04em;
+}
+.letter-title {
+  display: grid;
+  gap: clamp(6px, 1vh, 12px);
+  justify-items: center;
+  font-weight: 400;
+}
+.lt-row {
+  display: inline-flex;
+  align-items: center;
+  gap: clamp(6px, 1vw, 12px);
+}
+.lt-ch {
+  display: inline-block;
+  background: var(--bg, #fff);
+  color: var(--c, #1a0028);
+  border: 2px solid var(--ink);
+  padding: clamp(4px, .8vh, 8px) clamp(8px, 1.4vw, 14px);
+  font-family: "ZCOOL KuaiLe", "Ma Shan Zheng", cursive;
+  font-size: clamp(28px, 5vw, 54px);
+  line-height: 1.05;
+  transform: rotate(var(--rot, 0deg));
+  box-shadow: 3px 4px 0 rgba(26, 0, 40, .3);
+}
+.lt-name {
+  font-size: clamp(32px, 6vw, 64px);
+}
+.lt-colon {
+  background: transparent;
+  border: none;
+  box-shadow: none;
+  font-family: "Ma Shan Zheng", cursive;
+  color: var(--ink);
+  font-size: clamp(28px, 5vw, 54px);
+  padding: 0 4px;
+}
+
+/* 信纸正文 */
+.letter-body {
+  font-family: "Ma Shan Zheng", "ZCOOL XiaoWei", "PingFang SC", "Hiragino Sans GB", serif;
+  font-size: clamp(16px, 1.85vw, 21px);
+  line-height: 2em; /* 必须等于 background-size，否则横线对不齐 */
+  color: #1a0028;
+  letter-spacing: .04em;
+}
+.letter-body p {
+  margin: 0 0 1em;
+  text-indent: 2em; /* 首行缩进，中文信件习惯 */
+}
+.letter-body p:last-child { margin-bottom: 0; }
+.letter-body .hl {
+  color: var(--neon-pink);
+  font-weight: 700;
+  text-shadow: 1px 1px 0 #fff;
+}
+.letter-body .glow {
+  background: linear-gradient(120deg, #ff2e9f 0%, #9d4eff 60%, #00e5ff 100%);
+  -webkit-background-clip: text;
+          background-clip: text;
+  color: transparent;
+  font-weight: 700;
+  filter: drop-shadow(0 0 6px rgba(255, 46, 159, .25));
+}
+
+/* 信尾：签名 + 爱心 */
+.letter-foot {
+  margin-top: clamp(28px, 4vh, 48px);
+  display: grid;
+  gap: 4px;
+  justify-items: end;
+  position: relative;
+}
+.letter-signoff {
+  font-size: clamp(22px, 2.6vw, 30px);
+  color: var(--neon-pink);
+  transform: rotate(-2deg);
+  text-shadow: 1px 1px 0 #fff;
+}
+.letter-sign {
+  font-family: "Long Cang", "Caveat", cursive;
+  font-size: clamp(32px, 4.2vw, 52px);
+  color: var(--ink);
+  line-height: 1;
+  transform: rotate(-3deg);
+  padding-right: 8px;
+}
+.letter-heart {
+  position: absolute;
+  right: clamp(-8px, -1vw, -4px);
+  bottom: clamp(-14px, -2vh, -8px);
+  width: clamp(40px, 5vw, 60px);
+  display: inline-block;
+  transform: rotate(14deg);
+  filter: drop-shadow(2px 3px 0 rgba(26, 0, 40, .25));
+  animation: heart-pulse 1.8s ease-in-out infinite;
+}
+.letter-heart svg { width: 100%; height: auto; display: block; }
+@keyframes heart-pulse {
+  0%, 100% { transform: rotate(14deg) scale(1); }
+  50%      { transform: rotate(14deg) scale(1.08); }
+}
+
+/* letter 场景内的漂浮 emoji 定位 */
+.letter-float-1 { left: 6%;  bottom: 12%; font-size: clamp(28px, 4vw, 48px); }
+.letter-float-2 { right: 8%; top: 14%;    font-size: clamp(26px, 3.6vw, 42px); }
+.letter-float-3 { left: 10%; top: 22%;    font-size: clamp(22px, 3vw, 36px); }
+.letter-float-4 { right: 6%; bottom: 16%; font-size: clamp(30px, 4vw, 50px); }
+
+/* 窄屏适配 */
+@media (max-width: 640px) {
+  .letter-paper {
+    padding: 40px 22px 32px;
+    margin-top: 64px;
+  }
+  .letter-postmark {
+    width: 88px; height: 88px;
+    top: 56px; left: 8px;
+  }
+  .lt-ch { font-size: 32px; padding: 4px 10px; }
+  .lt-name { font-size: 40px; }
+  .lt-colon { font-size: 30px; }
+  .letter-body { font-size: 16px; line-height: 2em; }
+  .letter-stamp-corner { font-size: 12px; padding: 4px 8px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .letter-heart { animation: none; }
 }

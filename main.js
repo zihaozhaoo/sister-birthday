@@ -67,7 +67,7 @@ function updatePager() {
   if (counter) {
     const cur = scenes[currentIdx];
     if (!cur || cur.type === "static") {
-      counter.innerHTML = `<em>${currentIdx === 0 ? "开场" : "封面"}</em>`;
+      counter.innerHTML = `<em>${(cur && cur.label) || "·"}</em>`;
     } else {
       const total = window.NB.photoTotal || 0;
       counter.innerHTML = `<em>${pad3(cur.photoIdx + 1)}</em><span class="pc-sep">/</span>${pad3(total)}`;
@@ -290,13 +290,18 @@ async function init() {
     console.error("[chapters] build failed:", err);
   }
 
-  // 构建 scenes 列表：static (开场幕 + 封面) 在前，photo entries 紧随
-  staticEls = [$("#curtain"), $("#cover")];
+  // 构建 scenes 列表：开场幕 + 封面 → 162 张照片（photo-stage 单容器）→ 信
+  const curtainEl = $("#curtain");
+  const coverEl = $("#cover");
+  const letterEl = $("#letter");
+  staticEls = [curtainEl, coverEl, letterEl];
   photoStage = document.getElementById("photo-stage");
   const photoSeries = (window.NB && window.NB.photoSeries) || [];
   scenes = [
-    ...staticEls.map((el) => ({ type: "static", el })),
+    { type: "static", el: curtainEl, label: "开场" },
+    { type: "static", el: coverEl, label: "封面" },
     ...photoSeries.map((entry, i) => ({ type: "photo", entry, photoIdx: i })),
+    { type: "static", el: letterEl, label: "信 ♡" },
   ];
 
   renderPagerCounter();
