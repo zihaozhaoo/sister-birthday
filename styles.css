@@ -1565,6 +1565,8 @@ button { font: inherit; color: inherit; cursor: pointer; }
   border: 2px solid rgba(26, 0, 40, .25);
   box-shadow: 8px 10px 0 rgba(26, 0, 40, .22);
   transform: rotate(var(--rot, 0deg));
+  /* 旋转/阴影按 CSS 变量过渡，跨章节切换照片时不突兀 */
+  transition: transform .35s cubic-bezier(.2, .8, .3, 1.1);
   /* 在视口里尽可能大；高度限制让 portrait/landscape 都不溢出 */
   max-width: min(86vw, 720px);
   max-height: min(72vh, 760px);
@@ -1572,34 +1574,46 @@ button { font: inherit; color: inherit; cursor: pointer; }
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  will-change: transform;
 }
-/* 翻页动画：每次换 hero 时短暂淡入 + 微弹，外壳不动 */
-@keyframes hero-flip-in {
-  0%   { opacity: 0; transform: rotate(var(--rot, 0deg)) scale(.94) translateY(8px); }
-  60%  { opacity: 1; }
-  100% { opacity: 1; transform: rotate(var(--rot, 0deg)) scale(1) translateY(0); }
-}
-.polaroid-hero.is-flipping {
-  animation: hero-flip-in .42s cubic-bezier(.2, .85, .3, 1.15);
-}
-@media (prefers-reduced-motion: reduce) {
-  .polaroid-hero.is-flipping { animation: none; }
-}
-.polaroid-hero picture {
-  display: flex;
-  justify-content: center;
+
+/* 双层 picture cross-fade 容器 */
+.hero-canvas {
+  position: relative;
   flex: 1 1 auto;
   min-height: 0;
+  display: grid;
 }
-.polaroid-hero img {
+/* a/b 两层堆叠在同一格子；通过 opacity 切换 */
+.hero-pic {
+  grid-area: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity .38s ease;
+  pointer-events: none;
+  will-change: opacity;
+}
+.hero-pic.is-show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.hero-pic img {
   display: block;
   max-width: 100%;
   max-height: min(60vh, 640px);
   width: auto;
   height: auto;
   object-fit: contain;
-  background: rgba(26, 0, 40, .06);
+  background: rgba(26, 0, 40, .04);
 }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-pic { transition: none; }
+  .polaroid-hero { transition: none; }
+}
+/* picture/img 样式由上方 .hero-pic / .hero-pic img 接管（双层 cross-fade 结构） */
 
 .polaroid-hero figcaption {
   margin-top: clamp(10px, 1.4vh, 16px);
@@ -1685,7 +1699,7 @@ button { font: inherit; color: inherit; cursor: pointer; }
     max-height: 70vh;
     padding: 8px 8px 30px;
   }
-  .polaroid-hero img { max-height: 56vh; }
+  .hero-pic img { max-height: 56vh; }
   .ps-date { font-size: 22px; }
   .ps-note { font-size: 16px; }
 }

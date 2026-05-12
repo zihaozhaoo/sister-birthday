@@ -222,18 +222,25 @@
     tape.setAttribute("aria-hidden", "true");
     fig.appendChild(tape);
 
-    const picture = document.createElement("picture");
-    picture.id = "hero-picture";
-    const source = document.createElement("source");
-    source.id = "hero-source";
-    source.type = "image/webp";
-    picture.appendChild(source);
-    const img = document.createElement("img");
-    img.id = "hero-img";
-    img.alt = "";
-    img.decoding = "async";
-    picture.appendChild(img);
-    fig.appendChild(picture);
+    // 双层 picture：a/b 交替显示，opacity cross-fade
+    // 新图先加载到非活跃层，加载完成后两层互换 → 无闪屏
+    const canvas = document.createElement("div");
+    canvas.className = "hero-canvas";
+    canvas.id = "hero-canvas";
+    ["a", "b"].forEach((layer) => {
+      const pic = document.createElement("picture");
+      pic.className = `hero-pic hero-pic-${layer}`;
+      pic.id = `hero-pic-${layer}`;
+      const source = document.createElement("source");
+      source.type = "image/webp";
+      pic.appendChild(source);
+      const img = document.createElement("img");
+      img.alt = "";
+      img.decoding = "async";
+      pic.appendChild(img);
+      canvas.appendChild(pic);
+    });
+    fig.appendChild(canvas);
 
     const cap = document.createElement("figcaption");
     const date = document.createElement("span");
@@ -249,11 +256,17 @@
     return fig;
   }
 
+  // 当前显示的层 ("a" 或 "b")，下一次切换会用另一层装新图
+  let activeLayer = "a";
+  // 渲染版本号：用户连续翻页时丢弃过时的 onload 回调
+  let renderToken = 0;
+
   // ============================================================
   // 渲染 hero（翻页时调用，不重建 DOM）
   // ============================================================
 
   NS.renderHero = function renderHero(entry, idx, total) {
+    const myToken = ++renderToken;
     const { photo, year, seasonCn, chapterIdx } = entry;
     const variant = SCENE_VARIANTS[chapterIdx % SCENE_VARIANTS.length];
     const stage = document.getElementById("photo-stage");
@@ -275,28 +288,6 @@
     const counter = document.getElementById("ps-counter");
     if (counter) counter.innerHTML = `<em>${pad3(idx + 1)}</em> / ${pad3(total)}`;
 
-    // Hero picture（只换 src/srcset，不重建节点）
-    const base = photo.file.replace(/\.[^.]+$/, "");
-    const thumb = `${PHOTO_DIR}/${base}-thumb.webp`;
-    const medium = `${PHOTO_DIR}/${base}-medium.webp`;
-    const large = `${PHOTO_DIR}/${base}-large.webp`;
-    const source = document.getElementById("hero-source");
-    const img = document.getElementById("hero-img");
-    if (source) {
-      source.srcset = `${thumb} 320w, ${medium} 1280w, ${large} 2400w`;
-      source.sizes = "(max-width: 600px) 84vw, (max-width: 1100px) 60vw, 50vw";
-    }
-    if (img) {
-      img.src = medium;
-      if (photo.width && photo.height) {
-        img.width = photo.width;
-        img.height = photo.height;
-      } else {
-        img.removeAttribute("width");
-        img.removeAttribute("height");
-      }
-    }
-
     // 日期 + 旁注
     const seed = hash(photo.file);
     const d = parseTakenAt(photo.takenAt);
@@ -310,14 +301,61 @@
     if (fig) {
       const rot = ((seed % 11) - 5) * 0.6;
       fig.style.setProperty("--rot", `${rot.toFixed(2)}deg`);
-
-      // 翻页动画：先移除再重加，强制 reflow 重启动画
-      fig.classList.remove("is-flipping");
-      void fig.offsetWidth;
-      fig.classList.add("is-flipping");
     }
     const tape = document.getElementById("hero-tape");
     if (tape) tape.className = "tape-corner " + (seed % 2 === 0 ? "tl" : "tr");
+
+    // 双层 cross-fade：在非活跃层装新图，加载完成后两层互换
+    const base = photo.file.replace(/\.[^.]+$/, "");
+    const thumb = `${PHOTO_DIR}/${base}-thumb.webp`;
+    const medium = `${PHOTO_DIR}/${base}-medium.webp`;
+    const large = `${PHOTO_DIR}/${base}-large.webp`;
+    const nextLayer = activeLayer === "a" ? "b" : "a";
+    const nextPic = document.getElementById(`hero-pic-${nextLayer}`);
+    const curPic = document.getElementById(`hero-pic-${activeLayer}`);
+    if (nextPic) {
+      const nextSource = nextPic.querySelector("source");
+      const nextImg = nextPic.querySelector("img");
+      if (nextSource) {
+        nextSource.srcset = `${thumb} 320w, ${medium} 1280w, ${large} 2400w`;
+        nextSource.sizes = "(max-width: 600px) 84vw, (max-width: 1100px) 60vw, 50vw";
+      }
+
+      const swap = () => {
+        // 用户连续翻页时，过时的 onload 回调直接丢弃
+        if (myToken !== renderToken) return;
+        nextPic.classList.add("is-show");
+        if (curPic) curPic.classList.remove("is-show");
+        activeLayer = nextLayer;
+      };
+
+      if (nextImg) {
+        if (photo.width && photo.height) {
+          nextImg.width = photo.width;
+          nextImg.height = photo.height;
+        }
+        // 浏览器 cache 命中时 .complete 立即 true，直接 swap
+        if (nextImg.src === new URL(medium, location.href).href && nextImg.complete) {
+          swap();
+        } else {
+          nextImg.onload = swap;
+          nextImg.onerror = swap; // 即使加载失败也别卡在旧图
+          nextImg.src = medium;
+        }
+      }
+    }
+
+    // 预加载相邻 ±2 张（连续翻页时下一张已 cache，cross-fade 接近瞬时）
+    if (NS.photoSeries) {
+      [-2, -1, 1, 2].forEach((delta) => {
+        const n = idx + delta;
+        if (n < 0 || n >= NS.photoSeries.length) return;
+        const p = NS.photoSeries[n].photo;
+        const base2 = p.file.replace(/\.[^.]+$/, "");
+        const im = new Image();
+        im.src = `${PHOTO_DIR}/${base2}-medium.webp`;
+      });
+    }
   };
 
   // ============================================================
