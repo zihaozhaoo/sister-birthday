@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-05-11T07:41:04.187Z",
+  "generatedAt": "2026-05-12T01:39:55.144Z",
   "sourceDir": "photos-source",
   "count": 403,
   "sourceTally": {
@@ -479,7 +479,7 @@
       "bytes": 978631,
       "takenAt": "2020-07-17T13:48:00",
       "source": "filename",
-      "selected": false,
+      "selected": true,
       "broken": true
     },
     {
@@ -1124,7 +1124,7 @@
       "bytes": 4660206,
       "takenAt": "2021-02-19T14:48:47",
       "source": "filename",
-      "selected": true,
+      "selected": false,
       "width": 3456,
       "height": 4608
     },
@@ -3561,8 +3561,8 @@
       "maxPerMinute": 4
     },
     "keepListSize": 0,
-    "dropListSize": 0,
-    "selectedCount": 191
+    "dropListSize": 1,
+    "selectedCount": 190
   },
   "optimized": {
     "generatedAt": "2026-05-11T07:41:47.282Z",
