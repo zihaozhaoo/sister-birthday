@@ -308,6 +308,28 @@ async function init() {
   bindNavigation();
   bindSparkles();
   updatePager();
+
+  // 哈希锚点路由：#cover / #letter / #p47 直跳指定页
+  // 让分享链接到具体某张照片或终章成为可能
+  function gotoFromHash() {
+    const hash = (location.hash || "").slice(1).toLowerCase();
+    if (!hash) return;
+    let idx = -1;
+    if (hash === "curtain" || hash === "start") idx = 0;
+    else if (hash === "cover") idx = 1;
+    else if (hash === "letter" || hash === "end") idx = scenes.length - 1;
+    else {
+      const m = hash.match(/^p(\d+)$/);
+      if (m) {
+        const n = parseInt(m[1], 10);
+        const total = (window.NB && window.NB.photoTotal) || 0;
+        if (n >= 1 && n <= total) idx = 1 + n;
+      }
+    }
+    if (idx >= 0 && idx !== currentIdx) show(idx);
+  }
+  gotoFromHash();
+  window.addEventListener("hashchange", gotoFromHash);
 }
 
 init();
